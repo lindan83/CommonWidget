@@ -37,15 +37,18 @@ public class TopBar extends RelativeLayout {
 
     private static final boolean DEFAULT_LEFT_VISIBILITY = true;//默认显示左侧部分
     private static final int DEFAULT_LEFT_TEXT_COLOR = Color.BLACK;//默认左侧文字颜色
-    private static final float DEFAULT_LEFT_TEXT_SIZE = 18;//默认左侧文字大小
+    private static final float DEFAULT_LEFT_TEXT_SIZE = 18;//默认左侧文字大小sp
     private static final int DEFAULT_LEFT_DRAWABLE_ALIGNMENT = ALIGNMENT_RIGHT_TO_TEXT;//左侧图片默认在文本右边
     private static final int DEFAULT_LEFT_PADDING = 16;//左侧默认内边距dp
 
     private static final boolean DEFAULT_RIGHT_VISIBILITY = false;//默认不显示右侧部分
     private static final int DEFAULT_RIGHT_TEXT_COLOR = Color.BLACK;//默认右侧文字颜色
-    private static final float DEFAULT_RIGHT_TEXT_SIZE = 18;//默认右侧文字大小
+    private static final float DEFAULT_RIGHT_TEXT_SIZE = 18;//默认右侧文字大小sp
     private static final int DEFAULT_RIGHT_DRAWABLE_ALIGNMENT = ALIGNMENT_LEFT_TO_TEXT;//左侧图片默认在文本左边
     private static final int DEFAULT_RIGHT_PADDING = 16;//右侧默认内边距dp
+
+    private static final float DEFAULT_IMAGE_SIZE_RATIO = 0.6f;//图片是一个正方形，边长占TopBar的比例系数
+    private static final float DEFAULT_INTERNAL_SPACING = 8;//默认标题、左侧、右侧之间的间距dp
 
     //标题相关
     private String mTitle;
@@ -69,6 +72,9 @@ public class TopBar extends RelativeLayout {
     private Drawable mRightDrawable;
     private int mRightDrawableAlignment;
     private int mRightPadding;
+
+    //其他参数
+    private int mInternalSpacing;//标题、左侧、右侧之间的间距
 
     public interface OnClickListener {
         void onClickLeft();
@@ -127,7 +133,7 @@ public class TopBar extends RelativeLayout {
         mLeftVisibility = ta.getBoolean(R.styleable.TopBar_leftVisibility, DEFAULT_LEFT_VISIBILITY);
         mLeftText = ta.getString(R.styleable.TopBar_leftText);
         mLeftTextColor = ta.getColor(R.styleable.TopBar_leftTextColor, DEFAULT_LEFT_TEXT_COLOR);
-        mLeftTextSize = ta.getDimension(R.styleable.TopBar_leftTextSize, DEFAULT_LEFT_TEXT_SIZE);
+        mLeftTextSize = ta.getDimension(R.styleable.TopBar_leftTextSize, DensityUtil.sp2px(context, DEFAULT_LEFT_TEXT_SIZE));
         mLeftDrawable = ta.getDrawable(R.styleable.TopBar_leftDrawable);
         mLeftDrawableAlignment = ta.getInt(R.styleable.TopBar_leftDrawableAlignment, DEFAULT_LEFT_DRAWABLE_ALIGNMENT);
         mLeftPadding = ta.getDimensionPixelSize(R.styleable.TopBar_leftPadding,
@@ -136,11 +142,13 @@ public class TopBar extends RelativeLayout {
         mRightVisibility = ta.getBoolean(R.styleable.TopBar_rightVisibility, DEFAULT_RIGHT_VISIBILITY);
         mRightText = ta.getString(R.styleable.TopBar_rightText);
         mRightTextColor = ta.getColor(R.styleable.TopBar_rightTextColor, DEFAULT_RIGHT_TEXT_COLOR);
-        mRightTextSize = ta.getDimension(R.styleable.TopBar_rightTextSize, DEFAULT_RIGHT_TEXT_SIZE);
+        mRightTextSize = ta.getDimension(R.styleable.TopBar_rightTextSize, DensityUtil.sp2px(context, DEFAULT_RIGHT_TEXT_SIZE));
         mRightDrawable = ta.getDrawable(R.styleable.TopBar_rightDrawable);
         mRightDrawableAlignment = ta.getInt(R.styleable.TopBar_rightDrawableAlignment, DEFAULT_RIGHT_DRAWABLE_ALIGNMENT);
         mRightPadding = ta.getDimensionPixelSize(R.styleable.TopBar_rightPadding,
                 DensityUtil.dp2px(context, DEFAULT_RIGHT_PADDING));
+
+        mInternalSpacing = (int) ta.getDimension(R.styleable.TopBar_internalSpacing, DensityUtil.dp2px(context, DEFAULT_INTERNAL_SPACING));
         ta.recycle();
     }
 
@@ -180,7 +188,15 @@ public class TopBar extends RelativeLayout {
                 titleParams.leftMargin = mLeftPadding;
                 titleParams.rightMargin = mRightPadding;
             } else {
-                titleParams.leftMargin = titleParams.rightMargin = DensityUtil.dp2px(getContext(), 8);
+                if (!mLeftVisibility || (TextUtils.isEmpty(mLeftText)) && mLeftDrawable == null) {
+                    //存在左边
+                    titleParams.leftMargin = DensityUtil.dp2px(getContext(), 8);
+                } else if (!mRightVisibility || (TextUtils.isEmpty(mRightText)) && mRightDrawable == null) {
+                    //存在右边
+                    titleParams.rightMargin = DensityUtil.dp2px(getContext(), 8);
+                } else {
+                    titleParams.leftMargin = titleParams.rightMargin = mInternalSpacing;
+                }
             }
             titleTextView.setLayoutParams(titleParams);
             titleTextView.setOnClickListener(mInternalListener);
@@ -193,7 +209,6 @@ public class TopBar extends RelativeLayout {
             if (!TextUtils.isEmpty(mLeftText) && mLeftDrawable != null) {
                 //如果左侧同时存在文本与图片，则为其加上一个包装layout
                 LinearLayout leftLayout = new LinearLayout(getContext());
-                leftLayout.setBackgroundColor(Color.RED);
                 leftLayout.setId(R.id.com_lance_common_widget_TopBar_left_id);
                 leftLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
                 leftLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -201,8 +216,8 @@ public class TopBar extends RelativeLayout {
                 leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
                 leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
                 if (!TextUtils.isEmpty(mTitle)) {
-                    leftParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    leftParams.rightMargin = DensityUtil.dp2px(getContext(), 8);//距离标题8dp
+                    leftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
+                    leftParams.rightMargin = mInternalSpacing;//距离标题
                 }
                 if (mLeftPadding > 0) {
                     leftParams.leftMargin = mLeftPadding;
@@ -210,6 +225,10 @@ public class TopBar extends RelativeLayout {
                 leftLayout.setLayoutParams(leftParams);
 
                 ImageView leftImage = new ImageView(getContext());
+                int parentHeight = getHeight();
+                int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
+                LayoutParams leftImageParams = new LayoutParams(imageSize, imageSize);
+                leftImage.setLayoutParams(leftImageParams);
                 leftImage.setId(R.id.com_lance_common_widget_TopBar_left_image_id);
                 leftImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 leftImage.setImageDrawable(mLeftDrawable);
@@ -219,7 +238,7 @@ public class TopBar extends RelativeLayout {
                 leftText.setMaxLines(1);
                 leftText.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
                 leftText.setText(mLeftText);
-                leftText.setTextSize(mLeftTextSize);
+                leftText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mLeftTextSize);
                 leftText.setTextColor(mLeftTextColor);
                 if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     //图片在文本左侧
@@ -240,13 +259,14 @@ public class TopBar extends RelativeLayout {
                 leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
                 leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
                 if (!TextUtils.isEmpty(mTitle)) {
-                    leftParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    leftParams.rightMargin = DensityUtil.dp2px(getContext(), 8);//距离标题8dp
+                    leftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
+                    leftParams.rightMargin = mInternalSpacing;//距离标题
                 }
                 if (mLeftPadding > 0) {
                     leftParams.leftMargin = mLeftPadding;
                 }
                 leftTextView.setLayoutParams(leftParams);
+                leftTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 leftTextView.setOnClickListener(mInternalListener);
                 addView(leftTextView);
             } else if (mLeftDrawable != null) {
@@ -278,8 +298,8 @@ public class TopBar extends RelativeLayout {
                 rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
                 rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
                 if (!TextUtils.isEmpty(mTitle)) {
-                    rightParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.com_lance_common_widget_TopBar_title_id);//位于标题右侧
-                    rightParams.leftMargin = DensityUtil.dp2px(getContext(), 8);//距离标题8dp
+                    rightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题右侧
+                    rightParams.leftMargin = mInternalSpacing;//距离标题
                 }
                 if (mRightPadding > 0) {
                     rightParams.rightMargin = mRightPadding;
@@ -287,6 +307,10 @@ public class TopBar extends RelativeLayout {
                 rightLayout.setLayoutParams(rightParams);
 
                 ImageView rightImage = new ImageView(getContext());
+                int parentHeight = getHeight();
+                int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
+                LayoutParams rightImageParams = new LayoutParams(imageSize, imageSize);
+                rightImage.setLayoutParams(rightImageParams);
                 rightImage.setId(R.id.com_lance_common_widget_TopBar_right_image_id);
                 rightImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 rightImage.setImageDrawable(mRightDrawable);
@@ -296,7 +320,7 @@ public class TopBar extends RelativeLayout {
                 rightText.setMaxLines(1);
                 rightText.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
                 rightText.setText(mRightText);
-                rightText.setTextSize(mRightTextSize);
+                rightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
                 rightText.setTextColor(mRightTextColor);
                 if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     //图片在文本左侧
@@ -307,37 +331,38 @@ public class TopBar extends RelativeLayout {
                     rightLayout.addView(rightText);
                     rightLayout.addView(rightImage);
                 }
+                rightLayout.setOnClickListener(mInternalListener);
                 addView(rightLayout);
             } else if (!TextUtils.isEmpty(mRightText)) {
                 //右侧只有文本
                 TextView rightTextView = createTextView(mRightText, mRightTextSize, mRightTextColor);
                 rightTextView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                RelativeLayout.LayoutParams leftParams = (LayoutParams) rightTextView.getLayoutParams();
-                leftParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
-                leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (!TextUtils.isEmpty(mTitle)) {
-                    leftParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    leftParams.leftMargin = DensityUtil.dp2px(getContext(), 8);//距离标题8dp
-                }
-                if (mLeftPadding > 0) {
-                    leftParams.leftMargin = mLeftPadding;
-                }
-                rightTextView.setLayoutParams(leftParams);
-                addView(rightTextView);
-            } else if (mRightDrawable != null) {
-                //右侧只有图片
-                ImageView rightImageView = createImageView(mLeftDrawable);
-                rightImageView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                RelativeLayout.LayoutParams rightParams = (LayoutParams) rightImageView.getLayoutParams();
+                RelativeLayout.LayoutParams rightParams = (LayoutParams) rightTextView.getLayoutParams();
                 rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
                 rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
                 if (!TextUtils.isEmpty(mTitle)) {
-                    rightParams.rightMargin = DensityUtil.dp2px(getContext(), 8);//距离标题8dp
+                    rightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
+                    rightParams.leftMargin = mInternalSpacing;//距离标题
                 }
                 if (mRightPadding > 0) {
                     rightParams.rightMargin = mRightPadding;
                 }
+                rightTextView.setLayoutParams(rightParams);
+                rightTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                rightTextView.setOnClickListener(mInternalListener);
+                addView(rightTextView);
+            } else if (mRightDrawable != null) {
+                //右侧只有图片
+                ImageView rightImageView = createImageView(mRightDrawable);
+                rightImageView.setId(R.id.com_lance_common_widget_TopBar_right_id);
+                RelativeLayout.LayoutParams rightParams = (LayoutParams) rightImageView.getLayoutParams();
+                rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
+                rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
+                if (mRightPadding > 0) {
+                    rightParams.rightMargin = mRightPadding;
+                }
                 rightImageView.setLayoutParams(rightParams);
+                rightImageView.setOnClickListener(mInternalListener);
                 addView(rightImageView);
             }
         }
@@ -346,12 +371,10 @@ public class TopBar extends RelativeLayout {
     private TextView createTextView(String text, float textSize, int textColor) {
         TextView textView = new TextView(getContext());
         textView.setAllCaps(false);
-        textView.setBackgroundColor(Color.YELLOW);
-        textView.setGravity(Gravity.CENTER);
         textView.setMaxLines(1);
         textView.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
         textView.setText(text);
-        textView.setTextSize(textSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         textView.setTextColor(textColor);
         RelativeLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         textView.setLayoutParams(layoutParams);
@@ -362,10 +385,9 @@ public class TopBar extends RelativeLayout {
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setImageDrawable(drawable);
-        imageView.setBackgroundColor(Color.RED);
         RelativeLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int parentHeight = getHeight();
-        layoutParams.width = layoutParams.height = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * 0.6f);
+        layoutParams.width = layoutParams.height = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
         imageView.setLayoutParams(layoutParams);
         return imageView;
     }

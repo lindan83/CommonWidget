@@ -77,6 +77,9 @@
         <enum name="right" value="1"/>
     </attr>
     <attr name="rightPadding" format="dimension"/>
+
+    <!--其他参数-->
+    <attr name="internalSpacing" format="dimension"/>
     <declare-styleable name="TopBar">
         <attr name="titleText"/>
         <attr name="titleTextColor"/>
@@ -95,5 +98,6 @@
         <attr name="rightDrawable"/>
         <attr name="rightDrawableAlignment"/>
         <attr name="rightPadding"/>
+        <attr name="internalSpacing"/>
     </declare-styleable>
 </resources>
