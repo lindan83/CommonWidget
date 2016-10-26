@@ -1,0 +1,4 @@
+<resources>
+    <string name="str_widget_dialog_button_ok">确定</string>
+    <string name="str_widget_dialog_button_cancel">取消</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="com.lance.common.widget.TopBar.title.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.left.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.right.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.left.image.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.left.text.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.right.image.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.right.text.id" type="id"/>
+</resources>

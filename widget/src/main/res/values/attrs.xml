@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--扩展的PagerSlidingTabStrip-->
+    <attr name="pstsIndicatorColor" format="color"/>
+    <attr name="pstsUnderlineColor" format="color"/>
+    <attr name="pstsDividerColor" format="color"/>
+    <attr name="pstsIndicatorHeight" format="dimension"/>
+    <attr name="pstsUnderlineHeight" format="dimension"/>
+    <attr name="pstsDividerPadding" format="dimension"/>
+    <attr name="pstsTabPaddingLeftRight" format="dimension"/>
+    <attr name="pstsScrollOffset" format="dimension"/>
+    <attr name="pstsTabBackground" format="reference"/>
+    <attr name="pstsShouldExpand" format="boolean"/>
+    <attr name="pstsTextAllCaps" format="boolean"/>
+    <attr name="pstsTabTextSize" format="dimension"/>
+    <attr name="pstsTabTextColor" format="color"/>
+    <attr name="pstsSelectedTabTextSize" format="dimension"/>
+    <attr name="pstsSelectedTabTextColor" format="color"/>
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor"/>
+        <attr name="pstsUnderlineColor"/>
+        <attr name="pstsDividerColor"/>
+        <attr name="pstsIndicatorHeight"/>
+        <attr name="pstsUnderlineHeight"/>
+        <attr name="pstsDividerPadding"/>
+        <attr name="pstsTabPaddingLeftRight"/>
+        <attr name="pstsScrollOffset"/>
+        <attr name="pstsTabBackground"/>
+        <attr name="pstsShouldExpand"/>
+        <attr name="pstsTextAllCaps"/>
+        <attr name="pstsTabTextSize"/>
+        <attr name="pstsTabTextColor"/>
+        <attr name="pstsSelectedTabTextSize"/>
+        <attr name="pstsSelectedTabTextColor"/>
+    </declare-styleable>
+
+
+    <!--多图选择控件-->
+    <attr name="numColumns" format="integer"/>
+    <attr name="imageSpacing" format="dimension"/>
+    <attr name="addImage" format="reference"/>
+    <attr name="imageMaxCount" format="integer"/>
+    <declare-styleable name="MultiImageSelectorView">
+        <attr name="numColumns"/>
+        <attr name="imageSpacing"/>
+        <attr name="addImage"/>
+        <attr name="imageMaxCount"/>
+    </declare-styleable>
+
+
+    <!--通用TopBar-->
+    <!--标题相关-->
+    <attr name="titleText" format="string"/>
+    <attr name="titleTextColor" format="color"/>
+    <attr name="titleTextSize" format="dimension"/>
+
+    <!--左侧按钮相关-->
+    <attr name="leftVisibility" format="boolean"/>
+    <attr name="leftText" format="string"/>
+    <attr name="leftTextColor" format="color"/>
+    <attr name="leftTextSize" format="dimension"/>
+    <attr name="leftDrawable" format="reference"/>
+    <attr name="leftDrawableAlignment" format="enum">
+        <enum name="left" value="0"/>
+        <enum name="right" value="1"/>
+    </attr>
+    <attr name="leftPadding" format="dimension"/>
+
+    <!--右侧按钮相关-->
+    <attr name="rightVisibility" format="boolean"/>
+    <attr name="rightText" format="string"/>
+    <attr name="rightTextColor" format="color"/>
+    <attr name="rightTextSize" format="dimension"/>
+    <attr name="rightDrawable" format="reference"/>
+    <attr name="rightDrawableAlignment" format="enum">
+        <enum name="left" value="0"/>
+        <enum name="right" value="1"/>
+    </attr>
+    <attr name="rightPadding" format="dimension"/>
+    <declare-styleable name="TopBar">
+        <attr name="titleText"/>
+        <attr name="titleTextColor"/>
+        <attr name="titleTextSize"/>
+        <attr name="leftVisibility"/>
+        <attr name="leftText"/>
+        <attr name="leftTextColor"/>
+        <attr name="leftTextSize"/>
+        <attr name="leftDrawable"/>
+        <attr name="leftDrawableAlignment"/>
+        <attr name="leftPadding"/>
+        <attr name="rightVisibility"/>
+        <attr name="rightText"/>
+        <attr name="rightTextColor"/>
+        <attr name="rightTextSize"/>
+        <attr name="rightDrawable"/>
+        <attr name="rightDrawableAlignment"/>
+        <attr name="rightPadding"/>
+    </declare-styleable>
+</resources>
