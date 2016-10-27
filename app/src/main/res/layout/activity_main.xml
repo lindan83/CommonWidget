@@ -76,7 +76,7 @@
         android:background="@color/colorAccent"
         app:rightDrawable="@mipmap/icon_sousuo"
         app:rightDrawableAlignment="right"
-        app:rightText="右边文字右边文字"
+        app:rightText="右边文字"
         app:rightTextColor="@android:color/white"
         app:rightTextSize="16sp"
         app:rightVisibility="true"

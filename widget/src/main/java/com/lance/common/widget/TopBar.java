@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +26,7 @@ import com.lance.common.util.DensityUtil;
  */
 
 public class TopBar extends RelativeLayout {
-    private static final String TAG = "TopBarView";
+    private static final String TAG = "TopBar";
 
     private static final int ALIGNMENT_LEFT_TO_TEXT = 0;//图片在文本左边
     private static final int ALIGNMENT_RIGHT_TO_TEXT = 1;//图片在文本右边
@@ -156,6 +155,7 @@ public class TopBar extends RelativeLayout {
         ViewTreeObserver vto = getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
+                Log.d(TAG, "onPreDraw: ");
                 getViewTreeObserver().removeOnPreDrawListener(this);
                 int height = getMeasuredHeight();
                 int width = getMeasuredWidth();
@@ -208,10 +208,8 @@ public class TopBar extends RelativeLayout {
         if (mLeftVisibility) {
             if (!TextUtils.isEmpty(mLeftText) && mLeftDrawable != null) {
                 //如果左侧同时存在文本与图片，则为其加上一个包装layout
-                LinearLayout leftLayout = new LinearLayout(getContext());
+                RelativeLayout leftLayout = new RelativeLayout(getContext());
                 leftLayout.setId(R.id.com_lance_common_widget_TopBar_left_id);
-                leftLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-                leftLayout.setOrientation(LinearLayout.HORIZONTAL);
                 RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
                 leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
@@ -228,7 +226,7 @@ public class TopBar extends RelativeLayout {
                 int parentHeight = getHeight();
                 int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
                 LayoutParams leftImageParams = new LayoutParams(imageSize, imageSize);
-                leftImage.setLayoutParams(leftImageParams);
+                LayoutParams leftTextParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 leftImage.setId(R.id.com_lance_common_widget_TopBar_left_image_id);
                 leftImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 leftImage.setImageDrawable(mLeftDrawable);
@@ -242,13 +240,23 @@ public class TopBar extends RelativeLayout {
                 leftText.setTextColor(mLeftTextColor);
                 if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     //图片在文本左侧
-                    leftLayout.addView(leftImage);
-                    leftLayout.addView(leftText);
+                    leftImageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    leftImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    leftTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    leftTextParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_image_id);
+                    leftTextParams.leftMargin = mInternalSpacing / 2;
                 } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
                     //图片在文本右侧
-                    leftLayout.addView(leftText);
-                    leftLayout.addView(leftImage);
+                    leftTextParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    leftTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    leftImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    leftImageParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_text_id);
+                    leftImageParams.leftMargin = mInternalSpacing / 2;
                 }
+                leftImage.setLayoutParams(leftImageParams);
+                leftText.setLayoutParams(leftTextParams);
+                leftLayout.addView(leftImage);
+                leftLayout.addView(leftText);
                 leftLayout.setOnClickListener(mInternalListener);
                 addView(leftLayout);
             } else if (!TextUtils.isEmpty(mLeftText)) {
@@ -290,10 +298,8 @@ public class TopBar extends RelativeLayout {
         if (mRightVisibility) {
             if (!TextUtils.isEmpty(mRightText) && mRightDrawable != null) {
                 //如果右侧同时存在文本与图片，则为其加上一个包装layout
-                LinearLayout rightLayout = new LinearLayout(getContext());
+                RelativeLayout rightLayout = new RelativeLayout(getContext());
                 rightLayout.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                rightLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-                rightLayout.setOrientation(LinearLayout.HORIZONTAL);
                 RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
                 rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
@@ -310,7 +316,7 @@ public class TopBar extends RelativeLayout {
                 int parentHeight = getHeight();
                 int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
                 LayoutParams rightImageParams = new LayoutParams(imageSize, imageSize);
-                rightImage.setLayoutParams(rightImageParams);
+                LayoutParams rightTextParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 rightImage.setId(R.id.com_lance_common_widget_TopBar_right_image_id);
                 rightImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 rightImage.setImageDrawable(mRightDrawable);
@@ -324,13 +330,23 @@ public class TopBar extends RelativeLayout {
                 rightText.setTextColor(mRightTextColor);
                 if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     //图片在文本左侧
-                    rightLayout.addView(rightImage);
-                    rightLayout.addView(rightText);
+                    rightTextParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    rightTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    rightImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    rightImageParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_right_text_id);
+                    rightImageParams.rightMargin = mInternalSpacing / 2;
                 } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
                     //图片在文本右侧
-                    rightLayout.addView(rightText);
-                    rightLayout.addView(rightImage);
+                    rightImageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    rightImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    rightTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    rightTextParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_right_image_id);
+                    rightTextParams.rightMargin = mInternalSpacing / 2;
                 }
+                rightImage.setLayoutParams(rightImageParams);
+                rightText.setLayoutParams(rightTextParams);
+                rightLayout.addView(rightImage);
+                rightLayout.addView(rightText);
                 rightLayout.setOnClickListener(mInternalListener);
                 addView(rightLayout);
             } else if (!TextUtils.isEmpty(mRightText)) {
@@ -405,6 +421,7 @@ public class TopBar extends RelativeLayout {
             heightValue = DensityUtil.dp2px(getContext(), 48);
         }
         setMeasuredDimension(getMeasuredWidth(), heightValue);
+        Log.d(TAG, "onMeasure: ");
     }
 
     public String getTitle() {
