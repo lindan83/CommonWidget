@@ -514,8 +514,11 @@ public class TopBar extends RelativeLayout {
             newLeftParams.addRule(RelativeLayout.CENTER_VERTICAL);
             newLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             if (mTitleView != null) {
-                if(!(mCustomLeftViewLayoutId == 0 && !(mLeftView instanceof ImageView))) {
-                    //如果左侧不是自定义View且不是只有图片的情况，需要设置边界，不要覆盖到标题，因为ImageView已设置过宽高
+                if(mCustomLeftViewLayoutId == 0 && mLeftView instanceof ImageView) {
+                    //如果左侧不是自定义View且只指定图片的情况下，设置宽高
+                    newLeftParams.width = newLeftParams.height = (int) (mHeight * DEFAULT_IMAGE_SIZE_RATIO);
+                } else {
+                    //其他情況下均需設置边界，避免覆盖标题
                     newLeftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
                     newLeftParams.rightMargin = mInternalSpacing;
                 }
@@ -540,7 +543,11 @@ public class TopBar extends RelativeLayout {
             newRightParams.addRule(RelativeLayout.CENTER_VERTICAL);
             newRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             if (mTitleView != null) {
-                if(!(mCustomRightViewLayoutId == 0 && !(mRightView instanceof ImageView))) {
+                if(mCustomRightViewLayoutId == 0 && mRightView instanceof ImageView) {
+                    //如果右侧不是自定义View且只指定图片的情况下，设置宽高
+                    newRightParams.width = newRightParams.height = (int) (mHeight * DEFAULT_IMAGE_SIZE_RATIO);
+                } else {
+                    //其他情況下均需設置边界，避免覆盖标题
                     newRightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
                     newRightParams.leftMargin = mInternalSpacing;
                 }

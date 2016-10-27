@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimary"
-        app:leftText="左"
+        app:leftText="左侧文字左侧文字"
         app:leftTextColor="@android:color/white"
         app:leftTextSize="14sp"
         app:titleText="测试左侧文字"
