@@ -39,13 +39,13 @@ public class TopBar extends RelativeLayout {
     private static final boolean DEFAULT_LEFT_VISIBILITY = true;//默认显示左侧部分
     private static final int DEFAULT_LEFT_TEXT_COLOR = Color.BLACK;//默认左侧文字颜色
     private static final float DEFAULT_LEFT_TEXT_SIZE = 18;//默认左侧文字大小sp
-    private static final int DEFAULT_LEFT_DRAWABLE_ALIGNMENT = ALIGNMENT_RIGHT_TO_TEXT;//左侧图片默认在文本右边
+    private static final int DEFAULT_LEFT_DRAWABLE_ALIGNMENT = ALIGNMENT_LEFT_TO_TEXT;//左侧图片默认在文本左边
     private static final int DEFAULT_LEFT_PADDING = 16;//左侧默认内边距dp
 
     private static final boolean DEFAULT_RIGHT_VISIBILITY = false;//默认不显示右侧部分
     private static final int DEFAULT_RIGHT_TEXT_COLOR = Color.BLACK;//默认右侧文字颜色
     private static final float DEFAULT_RIGHT_TEXT_SIZE = 18;//默认右侧文字大小sp
-    private static final int DEFAULT_RIGHT_DRAWABLE_ALIGNMENT = ALIGNMENT_LEFT_TO_TEXT;//左侧图片默认在文本左边
+    private static final int DEFAULT_RIGHT_DRAWABLE_ALIGNMENT = ALIGNMENT_RIGHT_TO_TEXT;//左侧图片默认在文本右边
     private static final int DEFAULT_RIGHT_PADDING = 16;//右侧默认内边距dp
 
     private static final float DEFAULT_IMAGE_SIZE_RATIO = 0.6f;//图片是一个正方形，边长占TopBar的比例系数
