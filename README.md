@@ -15,34 +15,34 @@
 
 ###自定义属性：
 ##### 标题属性
-titleText 标题文本
-titleTextColor 标题文本颜色，默认黑色
-titleTextSize 标题文本大小，默认20sp
-titleVisibility 标题是否可见，默认true
-customTitleViewLayoutId 自定义标题View Layout Resource Id，如指定此属性，则其他标题属性将忽略
+titleText 标题文本<br/>
+titleTextColor 标题文本颜色，默认黑色<br/>
+titleTextSize 标题文本大小，默认20sp<br/>
+titleVisibility 标题是否可见，默认true<br/>
+customTitleViewLayoutId 自定义标题View Layout Resource Id，如指定此属性，则其他标题属性将忽略<br/>
 
 ##### 左侧View属性
-leftVisibility 左侧View是否可见，默认true
-leftText 左侧文本
-leftTextColor 左侧文本颜色，默认黑色
-leftTextSize 左侧文本大小，默认18sp
-leftDrawable 左侧图片
-leftDrawableAlignment 左侧图片相对于左侧文本位置，值有left和right
+leftVisibility 左侧View是否可见，默认true<br/>
+leftText 左侧文本<br/>
+leftTextColor 左侧文本颜色，默认黑色<br/>
+leftTextSize 左侧文本大小，默认18sp<br/>
+leftDrawable 左侧图片<br/>
+leftDrawableAlignment 左侧图片相对于左侧文本位置，值有left和right<br/>
 leftPadding 左侧内边距，默认16dp
-customLeftViewLayoutId 自定义左侧View Layout Resource Id，如指定此属性，则其他左侧View属性将忽略
+customLeftViewLayoutId 自定义左侧View Layout Resource Id，如指定此属性，则其他左侧View属性将忽略<br/>
 
 ##### 右侧View属性
-rightVisibility 右侧View是否可见，默认false
-rightText 右侧文本
-rightTextColor 右侧文本颜色，默认黑色
-rightTextSize 右侧文本大小，默认18sp
-rightDrawable 右侧图片
-rightDrawableAlignment 右侧图片相对于右侧文本位置，值有left和right
-rightPadding 右侧内边距，默认16dp
-customRightViewLayoutId 自定义右侧View Layout Resource Id，如指定此属性，则其他右侧View属性将忽略
+rightVisibility 右侧View是否可见，默认false<br/>
+rightText 右侧文本<br/>
+rightTextColor 右侧文本颜色，默认黑色<br/>
+rightTextSize 右侧文本大小，默认18sp<br/>
+rightDrawable 右侧图片<br/>
+rightDrawableAlignment 右侧图片相对于右侧文本位置，值有left和right<br/>
+rightPadding 右侧内边距，默认16dp<br/>
+customRightViewLayoutId 自定义右侧View Layout Resource Id，如指定此属性，则其他右侧View属性将忽略<br/>
 
 ##### 其他属性
-internalSpacing 左侧View、标题、右侧View之间的间距
+internalSpacing 左侧View、标题、右侧View之间的间距<br/>
 
 
 目前存在问题
