@@ -1,102 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.lance.common.widget.TopBar
-        android:id="@+id/top_bar_1"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/colorPrimary"
-        app:titleText="测试标题测试标题测试标题测试标题测试标题测试标题"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
+    <Button
+        android:id="@+id/btn_common_top_bar_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="TopBar的一般使用"
+        android:textAllCaps="false"/>
 
-    <com.lance.common.widget.TopBar
-        android:id="@+id/top_bar_2"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/colorPrimaryDark"
-        app:leftDrawable="@mipmap/icon_back"
-        app:titleText="测试左侧图片"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
+    <Button
+        android:id="@+id/btn_custom_top_bar_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="TopBar的自定义"
+        android:textAllCaps="false"/>
 
-    <com.lance.common.widget.TopBar
-        android:id="@+id/top_bar_3"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorAccent"
-        app:leftDrawable="@mipmap/icon_back"
-        app:leftDrawableAlignment="left"
-        app:leftText="左边文字左边文字"
-        app:titleText="测试左侧图片和文字"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
-
-    <com.lance.common.widget.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary"
-        app:leftText="左"
-        app:leftTextColor="@android:color/white"
-        app:leftTextSize="14sp"
-        app:titleText="测试左侧文字"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
-
-    <com.lance.common.widget.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimaryDark"
-        app:rightText="右边文字右边文字"
-        app:rightTextColor="@android:color/white"
-        app:rightTextSize="14sp"
-        app:rightVisibility="true"
-        app:titleText="测试右侧文字"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
-
-    <com.lance.common.widget.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary"
-        app:rightDrawable="@mipmap/icon_sousuo"
-        app:rightVisibility="true"
-        app:titleText="测试右侧图片"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
-
-    <com.lance.common.widget.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorAccent"
-        app:rightDrawable="@mipmap/icon_sousuo"
-        app:rightDrawableAlignment="right"
-        app:rightText="右边文字"
-        app:rightTextColor="@android:color/white"
-        app:rightTextSize="16sp"
-        app:rightVisibility="true"
-        app:titleText="测试右侧图片和文字"
-        app:titleTextColor="@android:color/white"
-        app:titleTextSize="18sp"/>
-
-    <com.lance.common.widget.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimaryDark"
-        app:leftDrawable="@mipmap/icon_back"
-        app:leftDrawableAlignment="left"
-        app:leftText="返回"
-        app:leftTextColor="@android:color/white"
-        app:rightDrawable="@mipmap/icon_sousuo"
-        app:rightDrawableAlignment="right"
-        app:rightText="查询"
-        app:rightTextColor="@android:color/white"
-        app:rightVisibility="true"
-        app:titleText="测试左侧和右侧"
-        app:titleTextColor="@android:color/white"/>
 </LinearLayout>

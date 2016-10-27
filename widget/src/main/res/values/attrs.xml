@@ -78,6 +78,10 @@
     </attr>
     <attr name="rightPadding" format="dimension"/>
 
+    <!--自定义相关-->
+    <attr name="customTitleViewLayoutId" format="reference"/>
+    <attr name="customLeftViewLayoutId" format="reference"/>
+    <attr name="customRightViewLayoutId" format="reference"/>
     <!--其他参数-->
     <attr name="internalSpacing" format="dimension"/>
     <declare-styleable name="TopBar">
@@ -99,5 +103,8 @@
         <attr name="rightDrawableAlignment"/>
         <attr name="rightPadding"/>
         <attr name="internalSpacing"/>
+        <attr name="customTitleViewLayoutId"/>
+        <attr name="customLeftViewLayoutId"/>
+        <attr name="customRightViewLayoutId"/>
     </declare-styleable>
 </resources>
