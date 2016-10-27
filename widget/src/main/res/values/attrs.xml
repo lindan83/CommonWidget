@@ -53,6 +53,7 @@
     <attr name="titleText" format="string"/>
     <attr name="titleTextColor" format="color"/>
     <attr name="titleTextSize" format="dimension"/>
+    <attr name="titleVisibility" format="boolean"/>
 
     <!--左侧按钮相关-->
     <attr name="leftVisibility" format="boolean"/>
@@ -88,6 +89,7 @@
         <attr name="titleText"/>
         <attr name="titleTextColor"/>
         <attr name="titleTextSize"/>
+        <attr name="titleVisibility"/>
         <attr name="leftVisibility"/>
         <attr name="leftText"/>
         <attr name="leftTextColor"/>
