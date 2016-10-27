@@ -31,6 +31,7 @@ public class TopBar extends RelativeLayout {
     private static final int ALIGNMENT_LEFT_TO_TEXT = 0;//图片在文本左边
     private static final int ALIGNMENT_RIGHT_TO_TEXT = 1;//图片在文本右边
 
+    private static final int DEFAULT_TOP_BAR_HEIGHT = 48;//默认TopBar高度dp
     private static final int DEFAULT_TITLE_TEXT_COLOR = Color.BLACK;//默认标题颜色
     private static final float DEFAULT_TITLE_TEXT_SIZE = 20;//默认标题大小sp
 
@@ -155,7 +156,6 @@ public class TopBar extends RelativeLayout {
         ViewTreeObserver vto = getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
-                Log.d(TAG, "onPreDraw: ");
                 getViewTreeObserver().removeOnPreDrawListener(this);
                 int height = getMeasuredHeight();
                 int width = getMeasuredWidth();
@@ -417,11 +417,10 @@ public class TopBar extends RelativeLayout {
         if (heightMode == MeasureSpec.EXACTLY) {
             heightValue = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            //如果设置高度为wrap_content，则设置固定高度为48dp
-            heightValue = DensityUtil.dp2px(getContext(), 48);
+            //如果设置高度为wrap_content，则设置固定高度为默认值
+            heightValue = DensityUtil.dp2px(getContext(), DEFAULT_TOP_BAR_HEIGHT);
         }
         setMeasuredDimension(getMeasuredWidth(), heightValue);
-        Log.d(TAG, "onMeasure: ");
     }
 
     public String getTitle() {
