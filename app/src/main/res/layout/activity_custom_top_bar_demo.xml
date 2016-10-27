@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        app:customTitleViewLayoutId="@layout/top_bar_custom_title"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        app:customLeftViewLayoutId="@layout/top_bar_custom_left"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        app:customRightViewLayoutId="@layout/top_bar_custom_right"/>
+
+    <com.lance.common.widget.TopBar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        app:customLeftViewLayoutId="@layout/top_bar_custom_left"
+        app:customRightViewLayoutId="@layout/top_bar_custom_right"
+        app:customTitleViewLayoutId="@layout/top_bar_custom_title"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        app:customTitleViewLayoutId="@layout/top_bar_custom_title"
+        app:leftDrawable="@mipmap/icon_back"
+        app:leftDrawableAlignment="left"
+        app:leftText="返回"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        app:customTitleViewLayoutId="@layout/top_bar_custom_title"
+        app:rightDrawable="@mipmap/icon_sousuo"
+        app:rightVisibility="true"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        app:customLeftViewLayoutId="@layout/top_bar_custom_left"
+        app:rightDrawable="@mipmap/icon_sousuo"
+        app:rightVisibility="true"
+        app:titleText="标题文字"
+        app:titleTextColor="@android:color/white"
+        app:titleTextSize="18sp"/>
+
+    <com.lance.common.widget.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        app:customRightViewLayoutId="@layout/top_bar_custom_right"
+        app:titleText="标题文字"
+        app:titleTextColor="@android:color/white"
+        app:titleTextSize="18sp"
+        app:leftDrawable="@mipmap/icon_back"
+        app:leftText="返回"
+        app:leftDrawableAlignment="left"/>
+</LinearLayout>
