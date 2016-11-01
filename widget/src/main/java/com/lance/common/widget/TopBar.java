@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,8 +85,11 @@ public class TopBar extends RelativeLayout {
     private int mInternalSpacing;//标题、左侧、右侧之间的间距
 
     private View mTitleView;
+    private boolean mIsCustomTitleView;//是否自定义的TitleView
     private View mLeftView;
+    private boolean mIsCustomLeftView;//是否自定义的LeftView
     private View mRightView;
+    private boolean mIsCustomRightView;//是否自定义的RightView
 
     private int mHeight;
 
@@ -168,6 +172,10 @@ public class TopBar extends RelativeLayout {
         mCustomLeftViewLayoutId = ta.getResourceId(R.styleable.TopBar_customLeftViewLayoutId, 0);
         mCustomRightViewLayoutId = ta.getResourceId(R.styleable.TopBar_customRightViewLayoutId, 0);
         ta.recycle();
+
+        mIsCustomTitleView = mCustomTitleViewLayoutId != 0;
+        mIsCustomLeftView = mCustomLeftViewLayoutId != 0;
+        mIsCustomRightView = mCustomRightViewLayoutId != 0;
     }
 
     private void initViews() {
@@ -183,8 +191,8 @@ public class TopBar extends RelativeLayout {
     }
 
     /**
-     * 创建内部View，如果用户既指定某一位置的自定义View Layout ID，又指定同一位置的其他相关属性，将优先使用自定义View
-     * 如果没有指定自定义View Layout ID，将利用同一位置的其他相关属性创建View，如果同一位置的其他相关属性也没有指定，将不创建该位置的View
+     * 创建内部Views，如果用户既指定某一位置的自定义View Layout ID，又指定同一位置的其他相关属性，将优先使用自定义View
+     * 如果没有指定自定义View Layout ID，将利用同一位置的其他相关属性创建默认View
      */
     private void generateInternalViews() {
         //如果用户指定了自定义的标题Layout，则优先选择自定义标题
@@ -203,258 +211,248 @@ public class TopBar extends RelativeLayout {
 
         //对于没有指定的自定义布局，则直接使用其他指定相关的属性构建
         if (mTitleView == null) {
-            mTitleView = createTitleView();
+            mTitleView = createDefaultTitleView();
         }
         if (mLeftView == null) {
-            mLeftView = createLeftView();
+            mLeftView = createDefaultLeftOrRightView(true);
         }
         if (mRightView == null) {
-            mRightView = createRightView();
+            mRightView = createDefaultLeftOrRightView(false);
         }
         setInternalViews();
     }
 
-    private View createTitleView() {
-        if (mTitleVisibility && !TextUtils.isEmpty(mTitle)) {
-            TextView titleTextView = new TextView(getContext());
-            titleTextView.setId(R.id.com_lance_common_widget_TopBar_title_id);
+    /**
+     * 创建默认标题View
+     *
+     * @return Title View
+     */
+    private View createDefaultTitleView() {
+        TextView titleTextView = new TextView(getContext());
+        titleTextView.setId(R.id.com_lance_common_widget_TopBar_title_id);
+        if (mTitle != null) {
             titleTextView.setText(mTitle);
-            titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
-            titleTextView.setTextColor(mTitleTextColor);
-            titleTextView.setMaxLines(1);
-            titleTextView.setEllipsize(TextUtils.TruncateAt.END);
-            RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            titleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            //如果不显示左右两部分，为标题设置左右边距
-            if ((!mLeftVisibility || (TextUtils.isEmpty(mLeftText)) && mLeftDrawable == null)
-                    && (!mRightVisibility || (TextUtils.isEmpty(mRightText)) && mRightDrawable == null)) {
-                titleParams.leftMargin = mLeftPadding;
-                titleParams.rightMargin = mRightPadding;
-            } else {
-                if (!mLeftVisibility || (TextUtils.isEmpty(mLeftText)) && mLeftDrawable == null) {
-                    //存在左边
-                    titleParams.leftMargin = DensityUtil.dp2px(getContext(), 8);
-                } else if (!mRightVisibility || (TextUtils.isEmpty(mRightText)) && mRightDrawable == null) {
-                    //存在右边
-                    titleParams.rightMargin = DensityUtil.dp2px(getContext(), 8);
-                } else {
-                    titleParams.leftMargin = titleParams.rightMargin = mInternalSpacing;
-                }
-            }
-            titleTextView.setLayoutParams(titleParams);
-            titleTextView.setOnClickListener(mInternalListener);
-            return titleTextView;
         }
-        return null;
+        titleTextView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
+        titleTextView.setTextColor(mTitleTextColor);
+        titleTextView.setMaxLines(1);
+        titleTextView.setEllipsize(TextUtils.TruncateAt.END);
+        titleTextView.setOnClickListener(mInternalListener);
+        return titleTextView;
     }
 
-    private View createLeftView() {
-        if (mLeftVisibility) {
-            if (!TextUtils.isEmpty(mLeftText) && mLeftDrawable != null) {
-                //如果左侧同时存在文本与图片，则为其加上一个包装layout
-                RelativeLayout leftLayout = new RelativeLayout(getContext());
-                leftLayout.setId(R.id.com_lance_common_widget_TopBar_left_id);
-                RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
-                leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (!TextUtils.isEmpty(mTitle)) {
-                    leftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    leftParams.rightMargin = mInternalSpacing;//距离标题
-                }
-                if (mLeftPadding > 0) {
-                    leftParams.leftMargin = mLeftPadding;
-                }
-                leftLayout.setLayoutParams(leftParams);
-
-                ImageView leftImage = new ImageView(getContext());
-                int parentHeight = getHeight();
-                int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
-                LayoutParams leftImageParams = new LayoutParams(imageSize, imageSize);
-                LayoutParams leftTextParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                leftImage.setId(R.id.com_lance_common_widget_TopBar_left_image_id);
-                leftImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                leftImage.setImageDrawable(mLeftDrawable);
-                TextView leftText = new TextView(getContext());
-                leftText.setId(R.id.com_lance_common_widget_TopBar_left_text_id);
-                leftText.setAllCaps(false);
-                leftText.setMaxLines(1);
-                leftText.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
-                leftText.setText(mLeftText);
-                leftText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mLeftTextSize);
-                leftText.setTextColor(mLeftTextColor);
-                if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                    //图片在文本左侧
-                    leftImageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    leftImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    leftTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    leftTextParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_image_id);
-                    leftTextParams.leftMargin = mInternalSpacing / 2;
-                } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    //图片在文本右侧
-                    leftTextParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    leftTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    leftImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    leftImageParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_text_id);
-                    leftImageParams.leftMargin = mInternalSpacing / 2;
-                }
-                leftImage.setLayoutParams(leftImageParams);
-                leftText.setLayoutParams(leftTextParams);
-                leftLayout.addView(leftImage);
-                leftLayout.addView(leftText);
-                leftLayout.setOnClickListener(mInternalListener);
-                return leftLayout;
-            }
-            if (!TextUtils.isEmpty(mLeftText)) {
-                //左侧只有文本
-                TextView leftTextView = createTextView(mLeftText, mLeftTextSize, mLeftTextColor);
-                leftTextView.setId(R.id.com_lance_common_widget_TopBar_left_id);
-                RelativeLayout.LayoutParams leftParams = (LayoutParams) leftTextView.getLayoutParams();
-                leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
-                leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (!TextUtils.isEmpty(mTitle)) {
-                    leftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    leftParams.rightMargin = mInternalSpacing;//距离标题
-                }
-                if (mLeftPadding > 0) {
-                    leftParams.leftMargin = mLeftPadding;
-                }
-                leftTextView.setLayoutParams(leftParams);
-                leftTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-                leftTextView.setOnClickListener(mInternalListener);
-                return leftTextView;
-            }
-            if (mLeftDrawable != null) {
-                //左侧只有图片
-                ImageView leftImageView = createImageView(mLeftDrawable);
-                leftImageView.setId(R.id.com_lance_common_widget_TopBar_left_id);
-                RelativeLayout.LayoutParams leftParams = (LayoutParams) leftImageView.getLayoutParams();
-                leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);//居于左侧
-                leftParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (mLeftPadding > 0) {
-                    leftParams.leftMargin = mLeftPadding;
-                }
-                leftImageView.setLayoutParams(leftParams);
-                leftImageView.setOnClickListener(mInternalListener);
-                return leftImageView;
-            }
-        }
-        return null;
-    }
-
-    private View createRightView() {
-        if (mRightVisibility) {
-            if (!TextUtils.isEmpty(mRightText) && mRightDrawable != null) {
-                //如果右侧同时存在文本与图片，则为其加上一个包装layout
-                RelativeLayout rightLayout = new RelativeLayout(getContext());
-                rightLayout.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
-                rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (!TextUtils.isEmpty(mTitle)) {
-                    rightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题右侧
-                    rightParams.leftMargin = mInternalSpacing;//距离标题
-                }
-                if (mRightPadding > 0) {
-                    rightParams.rightMargin = mRightPadding;
-                }
-                rightLayout.setLayoutParams(rightParams);
-
-                ImageView rightImage = new ImageView(getContext());
-                int parentHeight = getHeight();
-                int imageSize = (int) ((parentHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
-                LayoutParams rightImageParams = new LayoutParams(imageSize, imageSize);
-                LayoutParams rightTextParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                rightImage.setId(R.id.com_lance_common_widget_TopBar_right_image_id);
-                rightImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                rightImage.setImageDrawable(mRightDrawable);
-                TextView rightText = new TextView(getContext());
-                rightText.setId(R.id.com_lance_common_widget_TopBar_right_text_id);
-                rightText.setAllCaps(false);
-                rightText.setMaxLines(1);
-                rightText.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
-                rightText.setText(mRightText);
-                rightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
-                rightText.setTextColor(mRightTextColor);
-                if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                    //图片在文本左侧
-                    rightTextParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    rightTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    rightImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    rightImageParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_right_text_id);
-                    rightImageParams.rightMargin = mInternalSpacing / 2;
-                } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    //图片在文本右侧
-                    rightImageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    rightImageParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    rightTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
-                    rightTextParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_right_image_id);
-                    rightTextParams.rightMargin = mInternalSpacing / 2;
-                }
-                rightImage.setLayoutParams(rightImageParams);
-                rightText.setLayoutParams(rightTextParams);
-                rightLayout.addView(rightImage);
-                rightLayout.addView(rightText);
-                rightLayout.setOnClickListener(mInternalListener);
-                return rightLayout;
-            }
-            if (!TextUtils.isEmpty(mRightText)) {
-                //右侧只有文本
-                TextView rightTextView = createTextView(mRightText, mRightTextSize, mRightTextColor);
-                rightTextView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                RelativeLayout.LayoutParams rightParams = (LayoutParams) rightTextView.getLayoutParams();
-                rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
-                rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (!TextUtils.isEmpty(mTitle)) {
-                    rightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);//位于标题左侧
-                    rightParams.leftMargin = mInternalSpacing;//距离标题
-                }
-                if (mRightPadding > 0) {
-                    rightParams.rightMargin = mRightPadding;
-                }
-                rightTextView.setLayoutParams(rightParams);
-                rightTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-                rightTextView.setOnClickListener(mInternalListener);
-                return rightTextView;
-            }
-            if (mRightDrawable != null) {
-                //右侧只有图片
-                ImageView rightImageView = createImageView(mRightDrawable);
-                rightImageView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-                RelativeLayout.LayoutParams rightParams = (LayoutParams) rightImageView.getLayoutParams();
-                rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);//居于右侧
-                rightParams.addRule(RelativeLayout.CENTER_VERTICAL);//垂直居中
-                if (mRightPadding > 0) {
-                    rightParams.rightMargin = mRightPadding;
-                }
-                rightImageView.setLayoutParams(rightParams);
-                rightImageView.setOnClickListener(mInternalListener);
-                return rightImageView;
-            }
-        }
-        return null;
-    }
-
-    private TextView createTextView(String text, float textSize, int textColor) {
+    /**
+     * 创建左侧或右侧View
+     *
+     * @param left 创建左边还是右边的View true为左边
+     * @return Left Or Right View
+     */
+    private View createDefaultLeftOrRightView(boolean left) {
+        //在最外层增加一个FrameLayout规范位置与边界
+        FrameLayout wrapOuterLayout = new FrameLayout(getContext());
+        wrapOuterLayout.setId(left ? R.id.com_lance_common_widget_TopBar_left_wrap_id : R.id.com_lance_common_widget_TopBar_right_wrap_id);
+        //创建RelativeLayout放置View
+        RelativeLayout viewParent = new RelativeLayout(getContext());
+        viewParent.setId(left ? R.id.com_lance_common_widget_TopBar_left_id : R.id.com_lance_common_widget_TopBar_right_id);
         TextView textView = new TextView(getContext());
-        textView.setAllCaps(false);
-        textView.setMaxLines(1);
-        textView.setEllipsize(TextUtils.TruncateAt.END);//尾部截断
-        textView.setText(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        textView.setTextColor(textColor);
-        RelativeLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        textView.setLayoutParams(layoutParams);
-        return textView;
+        ImageView imageView = new ImageView(getContext());
+        if (left) {
+            //设置左侧View 文本
+            textView.setId(R.id.com_lance_common_widget_TopBar_left_text_id);
+            textView.setText(mLeftText);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mLeftTextSize);
+            textView.setTextColor(mLeftTextColor);
+            textView.setMaxLines(1);
+            textView.setEllipsize(TextUtils.TruncateAt.END);
+            //设置左侧图片
+            imageView.setId(R.id.com_lance_common_widget_TopBar_left_image_id);
+            if (mLeftDrawable != null) {
+                imageView.setVisibility(VISIBLE);
+                imageView.setImageDrawable(mLeftDrawable);
+            } else {
+                imageView.setVisibility(GONE);
+                imageView.setImageDrawable(null);
+            }
+            //设置对齐方式
+            LayoutParams textParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LayoutParams imageParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                //图片在文本左侧
+                textParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_image_id);
+                textParam.leftMargin = mInternalSpacing / 2;
+            } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                //图片在文本右侧
+                imageParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_text_id);
+                imageParam.leftMargin = mInternalSpacing / 2;
+            }
+            textView.setLayoutParams(textParam);
+            imageView.setLayoutParams(imageParam);
+        } else {
+            //设置右侧View 文本
+            textView.setId(R.id.com_lance_common_widget_TopBar_right_text_id);
+            textView.setText(mRightText);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
+            textView.setTextColor(mRightTextColor);
+            textView.setMaxLines(1);
+            textView.setEllipsize(TextUtils.TruncateAt.END);
+            //设置右侧图片
+            imageView.setId(R.id.com_lance_common_widget_TopBar_right_image_id);
+            if (mRightDrawable != null) {
+                imageView.setVisibility(VISIBLE);
+                imageView.setImageDrawable(mRightDrawable);
+            } else {
+                imageView.setVisibility(GONE);
+                imageView.setImageDrawable(null);
+            }
+            //设置对齐方式
+            LayoutParams textParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LayoutParams imageParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                //图片在文本左侧
+                textParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_right_image_id);
+                textParam.leftMargin = mInternalSpacing / 2;
+            } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                //图片在文本右侧
+                imageParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_right_text_id);
+                imageParam.leftMargin = mInternalSpacing / 2;
+            }
+            textView.setLayoutParams(textParam);
+            imageView.setLayoutParams(imageParam);
+        }
+        viewParent.addView(textView);
+        viewParent.addView(imageView);
+
+        if (left) {
+            viewParent.setVisibility(mLeftVisibility ? VISIBLE : GONE);
+            if (TextUtils.isEmpty(mLeftText) && mLeftDrawable == null) {
+                viewParent.setVisibility(GONE);
+            }
+        } else {
+            viewParent.setVisibility(mRightVisibility ? VISIBLE : GONE);
+            if (TextUtils.isEmpty(mRightText) && mRightDrawable == null) {
+                viewParent.setVisibility(GONE);
+            }
+        }
+        viewParent.setOnClickListener(mInternalListener);
+        wrapOuterLayout.addView(viewParent);
+        return viewParent;
     }
 
-    private ImageView createImageView(Drawable drawable) {
-        ImageView imageView = new ImageView(getContext());
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setImageDrawable(drawable);
-        RelativeLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.width = layoutParams.height = (int) ((mHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
-        imageView.setLayoutParams(layoutParams);
-        return imageView;
+    /**
+     * 设置内部Views到正确位置
+     */
+    private void setInternalViews() {
+        removeAllViews();
+        //设置标题
+        if (mIsCustomTitleView) {
+            //如果是自定义标题View
+            // TODO: 16-11-1
+        } else {
+            //如果不是自定义标题View
+            if (mTitleView != null) {
+                ViewGroup.LayoutParams oldTitleParams = mTitleView.getLayoutParams();
+                RelativeLayout.LayoutParams newTitleParams;
+                if (oldTitleParams != null) {
+                    newTitleParams = new LayoutParams(oldTitleParams);
+                } else {
+                    newTitleParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                newTitleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                //如果左侧不可见，或没有设置文本与图片
+                if (!mLeftVisibility || (TextUtils.isEmpty(mLeftText) && mLeftDrawable == null)) {
+                    if (mLeftPadding > 0) {
+                        newTitleParams.leftMargin = mLeftPadding;
+                    }
+                } else {
+                    newTitleParams.leftMargin = mInternalSpacing;
+                }
+                //如果右侧不可见，或没有设置文本与图片
+                if (!mRightVisibility || (TextUtils.isEmpty(mRightText) && mRightDrawable == null)) {
+                    if (mRightPadding > 0) {
+                        newTitleParams.rightMargin = mRightPadding;
+                    }
+                } else {
+                    newTitleParams.rightMargin = mInternalSpacing;
+                }
+                mTitleView.setLayoutParams(newTitleParams);
+                mTitleView.setOnClickListener(mInternalListener);
+                addView(mTitleView);
+            }
+        }
+        //设置Left View
+        if (mIsCustomLeftView) {
+            //如果是自定义Left View
+            // TODO: 16-11-1
+        } else {
+            //如果不是自定义Left View
+            //如果最外层包装的FrameLayout，设定边界
+            FrameLayout leftWrap = (FrameLayout) mLeftView.getParent();
+            //如果左侧的View外层是个FrameLayout，表明是默认创建的View
+            LayoutParams wrapParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            wrapParam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            wrapParam.addRule(RelativeLayout.CENTER_VERTICAL);
+            //如果标题存在且可见
+            if (mTitleVisibility && mTitleView != null && !TextUtils.isEmpty(mTitle)) {
+                wrapParam.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
+            }
+            if (mLeftPadding > 0) {
+                wrapParam.leftMargin = mLeftPadding;
+            }
+            //设置RelativeLayout宽高自适应
+            ViewGroup.LayoutParams leftViewParam = mLeftView.getLayoutParams();
+            leftViewParam.width = leftViewParam.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            mLeftView.setLayoutParams(leftViewParam);
+            //设置文本与图片垂直居中
+            TextView textView = (TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id);
+            ImageView imageView = (ImageView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_image_id);
+            LayoutParams textParams = (LayoutParams) textView.getLayoutParams();
+            textParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            textView.setLayoutParams(textParams);
+            LayoutParams imageParams = (LayoutParams) imageView.getLayoutParams();
+            imageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            imageParams.width = imageParams.height = (int) ((mHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
+            imageView.setLayoutParams(imageParams);
+            leftWrap.setLayoutParams(wrapParam);
+            addView(leftWrap);
+        }
+        //设置Right View
+        if (mIsCustomRightView) {
+            //如果是自定义Right View
+            // TODO: 16-11-1
+        } else {
+            //如果不是自定义Right View
+            //如果最外层包装的FrameLayout，设定边界
+            FrameLayout rightWrap = (FrameLayout) mRightView.getParent();
+            //如果右侧的View外层是个FrameLayout，表明是默认创建的View
+            LayoutParams wrapParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            wrapParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            wrapParam.addRule(RelativeLayout.CENTER_VERTICAL);
+            //如果标题存在且可见
+            if (mTitleVisibility && mTitleView != null && !TextUtils.isEmpty(mTitle)) {
+                wrapParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
+            }
+            if (mRightPadding > 0) {
+                wrapParam.rightMargin = mRightPadding;
+            }
+            //设置RelativeLayout宽高自适应
+            FrameLayout.LayoutParams rightViewParam = (FrameLayout.LayoutParams) mRightView.getLayoutParams();
+            rightViewParam.width = rightViewParam.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            rightViewParam.gravity = Gravity.RIGHT;
+            mRightView.setLayoutParams(rightViewParam);
+            //设置文本与图片垂直居中
+            TextView textView = (TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id);
+            ImageView imageView = (ImageView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_image_id);
+            LayoutParams textParams = (LayoutParams) textView.getLayoutParams();
+            textParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            textView.setLayoutParams(textParams);
+            LayoutParams imageParams = (LayoutParams) imageView.getLayoutParams();
+            imageParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            imageParams.width = imageParams.height = (int) ((mHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
+            imageView.setLayoutParams(imageParams);
+            rightWrap.setLayoutParams(wrapParam);
+            addView(rightWrap);
+        }
     }
 
     @Override
@@ -470,95 +468,6 @@ public class TopBar extends RelativeLayout {
             heightValue = DensityUtil.dp2px(getContext(), DEFAULT_TOP_BAR_HEIGHT);
         }
         setMeasuredDimension(getMeasuredWidth(), heightValue);
-    }
-
-    /**
-     * 放置View
-     */
-    public void setInternalViews() {
-        if (mTitleView == null && mLeftView == null && mRightView == null) {
-            return;
-        }
-        removeAllViews();
-        //设置标题
-        if (mTitleView != null) {
-            mTitleView.setId(R.id.com_lance_common_widget_TopBar_title_id);
-            ViewGroup.LayoutParams oldTitleParams = mTitleView.getLayoutParams();
-            RelativeLayout.LayoutParams newTitleParams;
-            if (oldTitleParams != null) {
-                newTitleParams = new LayoutParams(oldTitleParams);
-            } else {
-                newTitleParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            }
-            newTitleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            if (mLeftView == null && mLeftPadding > 0) {
-                newTitleParams.leftMargin = mLeftPadding;
-            }
-            if (mRightView == null && mRightPadding > 0) {
-                newTitleParams.rightMargin = mRightPadding;
-            }
-            mTitleView.setLayoutParams(newTitleParams);
-            mTitleView.setOnClickListener(mInternalListener);
-            addView(mTitleView);
-        }
-        //设置Left View
-        if (mLeftView != null) {
-            mLeftView.setId(R.id.com_lance_common_widget_TopBar_left_id);
-            ViewGroup.LayoutParams oldLeftParams = mLeftView.getLayoutParams();
-            RelativeLayout.LayoutParams newLeftParams;
-            if (oldLeftParams != null) {
-                newLeftParams = new LayoutParams(oldLeftParams);
-            } else {
-                newLeftParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            }
-            newLeftParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            newLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            if (mTitleView != null) {
-                if(mCustomLeftViewLayoutId == 0 && mLeftView instanceof ImageView) {
-                    //如果左侧不是自定义View且只指定图片的情况下，设置宽高
-                    newLeftParams.width = newLeftParams.height = (int) (mHeight * DEFAULT_IMAGE_SIZE_RATIO);
-                } else {
-                    //其他情況下均需設置边界，避免覆盖标题
-                    newLeftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
-                    newLeftParams.rightMargin = mInternalSpacing;
-                }
-            }
-            if (mLeftPadding > 0) {
-                newLeftParams.leftMargin = mLeftPadding;
-            }
-            mLeftView.setLayoutParams(newLeftParams);
-            mLeftView.setOnClickListener(mInternalListener);
-            addView(mLeftView);
-        }
-        //设置Right View
-        if (mRightView != null) {
-            mRightView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-            ViewGroup.LayoutParams oldRightParams = mRightView.getLayoutParams();
-            RelativeLayout.LayoutParams newRightParams;
-            if (oldRightParams != null) {
-                newRightParams = new LayoutParams(oldRightParams);
-            } else {
-                newRightParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            }
-            newRightParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            newRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            if (mTitleView != null) {
-                if(mCustomRightViewLayoutId == 0 && mRightView instanceof ImageView) {
-                    //如果右侧不是自定义View且只指定图片的情况下，设置宽高
-                    newRightParams.width = newRightParams.height = (int) (mHeight * DEFAULT_IMAGE_SIZE_RATIO);
-                } else {
-                    //其他情況下均需設置边界，避免覆盖标题
-                    newRightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
-                    newRightParams.leftMargin = mInternalSpacing;
-                }
-            }
-            if (mRightPadding > 0) {
-                newRightParams.rightMargin = mRightPadding;
-            }
-            mRightView.setLayoutParams(newRightParams);
-            mRightView.setOnClickListener(mInternalListener);
-            addView(mRightView);
-        }
     }
 
     public String getTitle() {

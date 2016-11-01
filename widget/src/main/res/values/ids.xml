@@ -7,4 +7,6 @@
     <item name="com.lance.common.widget.TopBar.left.text.id" type="id"/>
     <item name="com.lance.common.widget.TopBar.right.image.id" type="id"/>
     <item name="com.lance.common.widget.TopBar.right.text.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.left.wrap.id" type="id"/>
+    <item name="com.lance.common.widget.TopBar.right.wrap.id" type="id"/>
 </resources>
