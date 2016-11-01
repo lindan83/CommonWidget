@@ -1,7 +1,7 @@
 package com.lance.widget.demo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.lance.common.util.ToastUtil;
 import com.lance.common.widget.TopBar;
