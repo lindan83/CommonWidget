@@ -21,4 +21,16 @@
         android:text="TopBar的自定义"
         android:textAllCaps="false"/>
 
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/color_606060"/>
+
+    <Button
+        android:id="@+id/btn_common_option_view_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="OptionView的一般使用"
+        android:textAllCaps="false"/>
 </LinearLayout>

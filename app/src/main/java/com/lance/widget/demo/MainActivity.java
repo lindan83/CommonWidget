@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_custom_top_bar_demo:
                 startActivity(new Intent(this, CustomTopBarDemoActivity.class));
                 break;
+            case R.id.btn_common_option_view_demo:
+                startActivity(new Intent(this, CommonOptionViewDemoActivity.class));
+                break;
         }
     }
 }

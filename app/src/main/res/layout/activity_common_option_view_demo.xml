@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <com.lance.common.widget.OptionView
+        android:id="@+id/option_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:onClick="showDemo"
+        app:leftIcon="@mipmap/icon_renzhengb"
+        app:rightIcon="@mipmap/icon_xiangqian"
+        app:text="认证"/>
+
+    <com.lance.common.widget.OptionView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        app:leftIcon="@mipmap/icon_yuangongzhuce"
+        app:text="员工认证"/>
+
+    <com.lance.common.widget.OptionView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        app:text="设置"/>
+
+    <com.lance.common.widget.OptionView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        app:rightIcon="@mipmap/icon_xiangqian"
+        app:text="设置"/>
+
+    <com.lance.common.widget.OptionView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        app:leftIcon="@mipmap/icon_wodegongsi"
+        app:rightIcon="@mipmap/icon_xiangqian"/>
+
+    <com.lance.common.widget.OptionView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        app:rightIcon="@mipmap/icon_xiangqian"/>
+</LinearLayout>

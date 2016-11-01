@@ -34,5 +34,7 @@ public class CommonTopBarDemoActivity extends AppCompatActivity {
                 }
             });
         }
+
+        mTopBar.setLeftText("修改左边文字");
     }
 }

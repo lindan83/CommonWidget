@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".CustomTopBarDemoActivity">
         </activity>
+        <activity android:name=".CommonOptionViewDemoActivity">
+        </activity>
     </application>
 
 </manifest>
