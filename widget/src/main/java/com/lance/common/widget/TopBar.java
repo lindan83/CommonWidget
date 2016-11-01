@@ -199,14 +199,20 @@ public class TopBar extends RelativeLayout {
         if (mCustomTitleViewLayoutId != 0) {
             mTitleView = LayoutInflater.from(getContext()).inflate(mCustomTitleViewLayoutId, null);
             mTitleView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
+            mTitleView.setId(R.id.com_lance_common_widget_TopBar_title_id);
+            mTitleView.setOnClickListener(mInternalListener);
         }
         if (mCustomLeftViewLayoutId != 0) {
             mLeftView = LayoutInflater.from(getContext()).inflate(mCustomLeftViewLayoutId, null);
             mLeftView.setVisibility(mLeftVisibility ? VISIBLE : GONE);
+            mLeftView.setId(R.id.com_lance_common_widget_TopBar_left_id);
+            mLeftView.setOnClickListener(mInternalListener);
         }
         if (mCustomRightViewLayoutId != 0) {
             mRightView = LayoutInflater.from(getContext()).inflate(mCustomRightViewLayoutId, null);
             mRightView.setVisibility(mRightVisibility ? VISIBLE : GONE);
+            mRightView.setId(R.id.com_lance_common_widget_TopBar_right_id);
+            mRightView.setOnClickListener(mInternalListener);
         }
 
         //对于没有指定的自定义布局，则直接使用其他指定相关的属性构建
@@ -347,7 +353,19 @@ public class TopBar extends RelativeLayout {
         //设置标题
         if (mIsCustomTitleView) {
             //如果是自定义标题View
-            // TODO: 16-11-1
+            if (mTitleView != null) {
+                //先获取原布局参数
+                ViewGroup.LayoutParams oldTitleParams = mTitleView.getLayoutParams();
+                RelativeLayout.LayoutParams newTitleParams;
+                if (oldTitleParams != null) {
+                    newTitleParams = new LayoutParams(oldTitleParams);
+                } else {
+                    newTitleParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                newTitleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                mTitleView.setLayoutParams(newTitleParams);
+                addView(mTitleView);
+            }
         } else {
             //如果不是自定义标题View
             if (mTitleView != null) {
@@ -383,7 +401,27 @@ public class TopBar extends RelativeLayout {
         //设置Left View
         if (mIsCustomLeftView) {
             //如果是自定义Left View
-            // TODO: 16-11-1
+            if (mLeftView != null) {
+                //先获取原布局参数，对于自定义View，只进行定位，不对其他参数进行干预
+                ViewGroup.LayoutParams oldLeftParams = mLeftView.getLayoutParams();
+                RelativeLayout.LayoutParams newLeftParams;
+                if (oldLeftParams != null) {
+                    newLeftParams = new LayoutParams(oldLeftParams);
+                } else {
+                    newLeftParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                newLeftParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                newLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                if (mLeftPadding > 0) {
+                    newLeftParams.leftMargin = mLeftPadding;
+                }
+                if (mTitleView != null && mTitleVisibility) {
+                    newLeftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
+                    newLeftParams.rightMargin = mInternalSpacing;
+                }
+                mLeftView.setLayoutParams(newLeftParams);
+                addView(mLeftView);
+            }
         } else {
             //如果不是自定义Left View
             //如果最外层包装的FrameLayout，设定边界
@@ -419,7 +457,28 @@ public class TopBar extends RelativeLayout {
         //设置Right View
         if (mIsCustomRightView) {
             //如果是自定义Right View
-            // TODO: 16-11-1
+            //如果是自定义Left View
+            if (mRightView != null) {
+                //先获取原布局参数，对于自定义View，只进行定位，不对其他参数进行干预
+                ViewGroup.LayoutParams oldRightParams = mRightView.getLayoutParams();
+                RelativeLayout.LayoutParams newRightParams;
+                if (oldRightParams != null) {
+                    newRightParams = new LayoutParams(oldRightParams);
+                } else {
+                    newRightParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                newRightParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                newRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                if (mRightPadding > 0) {
+                    newRightParams.rightMargin = mRightPadding;
+                }
+                if (mTitleView != null && mTitleVisibility) {
+                    newRightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
+                    newRightParams.leftMargin = mInternalSpacing;
+                }
+                mRightView.setLayoutParams(newRightParams);
+                addView(mRightView);
+            }
         } else {
             //如果不是自定义Right View
             //如果最外层包装的FrameLayout，设定边界
@@ -455,6 +514,32 @@ public class TopBar extends RelativeLayout {
         }
     }
 
+    private void setImageAndTextAlignment(int alignment, ImageView imageView, TextView textView) {
+        LayoutParams imageParam = (LayoutParams) imageView.getLayoutParams();
+        LayoutParams textParam = (LayoutParams) textView.getLayoutParams();
+        switch (alignment) {
+            case ALIGNMENT_LEFT_TO_TEXT:
+                //图片在文本左边
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    textParam.removeRule(RelativeLayout.RIGHT_OF);
+                }
+                textParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_image_id);
+                textParam.leftMargin = mInternalSpacing / 2;
+                break;
+            case ALIGNMENT_RIGHT_TO_TEXT:
+                //图片在文本右边
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    imageParam.removeRule(RelativeLayout.RIGHT_OF);
+                }
+                imageParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_left_text_id);
+                imageParam.leftMargin = mInternalSpacing / 2;
+                break;
+        }
+        textView.setLayoutParams(textParam);
+        imageView.setLayoutParams(imageParam);
+        requestLayout();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -475,7 +560,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setTitle(String title) {
-        this.mTitle = title;
+        if (TextUtils.equals(mTitle, title)) {
+            return;
+        }
+        if (!mIsCustomTitleView) {
+            this.mTitle = title;
+            ((TextView) mTitleView).setText(mTitle);
+        }
     }
 
     public int getTitleTextColor() {
@@ -483,7 +574,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setTitleTextColor(int titleTextColor) {
-        this.mTitleTextColor = titleTextColor;
+        if (mTitleTextColor == titleTextColor) {
+            return;
+        }
+        if (!mIsCustomTitleView) {
+            this.mTitleTextColor = titleTextColor;
+            ((TextView) mTitleView).setTextColor(mTitleTextColor);
+        }
     }
 
     public float getTitleTextSize() {
@@ -491,7 +588,25 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setTitleTextSize(float titleTextSize) {
-        this.mTitleTextSize = titleTextSize;
+        if (mTitleTextSize == titleTextSize) {
+            return;
+        }
+        if (!mIsCustomTitleView) {
+            this.mTitleTextSize = titleTextSize;
+            ((TextView) mTitleView).setTextSize(mTitleTextSize);
+        }
+    }
+
+    public boolean isTitleVisible() {
+        return mTitleVisibility;
+    }
+
+    public void setTitleVisible(boolean titleVisible) {
+        if (mTitleVisibility == titleVisible) {
+            return;
+        }
+        this.mTitleVisibility = titleVisible;
+        mTitleView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
     }
 
     public boolean isLeftVisible() {
@@ -499,7 +614,15 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftVisible(boolean leftVisible) {
+        if (mLeftVisibility == leftVisible) {
+            return;
+        }
         this.mLeftVisibility = leftVisible;
+        if (mIsCustomLeftView) {
+            mLeftView.setVisibility(mLeftVisibility ? VISIBLE : GONE);
+        } else {
+            ((FrameLayout) mLeftView.getParent()).setVisibility(mLeftVisibility ? VISIBLE : GONE);
+        }
     }
 
     public String getLeftText() {
@@ -507,7 +630,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftText(String leftText) {
-        this.mLeftText = leftText;
+        if (TextUtils.equals(mLeftText, leftText)) {
+            return;
+        }
+        if (!mIsCustomLeftView) {
+            this.mLeftText = leftText;
+            ((TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id)).setText(mLeftText);
+        }
     }
 
     public int getLeftTextColor() {
@@ -515,7 +644,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftTextColor(int leftTextColor) {
-        this.mLeftTextColor = leftTextColor;
+        if (mLeftTextColor == leftTextColor) {
+            return;
+        }
+        if (!mIsCustomLeftView) {
+            this.mLeftTextColor = leftTextColor;
+            ((TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id)).setTextColor(mLeftTextColor);
+        }
     }
 
     public float getLeftTextSize() {
@@ -523,7 +658,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftTextSize(float leftTextSize) {
-        this.mLeftTextSize = leftTextSize;
+        if (mLeftTextSize == leftTextSize) {
+            return;
+        }
+        if (!mIsCustomLeftView) {
+            this.mLeftTextSize = leftTextSize;
+            ((TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id)).setTextSize(mLeftTextSize);
+        }
     }
 
     public Drawable getLeftDrawable() {
@@ -531,7 +672,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftDrawable(Drawable leftDrawable) {
-        this.mLeftDrawable = leftDrawable;
+        if (mLeftDrawable.equals(leftDrawable)) {
+            return;
+        }
+        if (!mIsCustomLeftView) {
+            this.mLeftDrawable = leftDrawable;
+            ((ImageView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_image_id)).setImageDrawable(mLeftDrawable);
+        }
     }
 
     public int getLeftDrawableAlignment() {
@@ -539,7 +686,15 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftDrawableAlignment(int leftDrawableAlignment) {
-        this.mLeftDrawableAlignment = leftDrawableAlignment;
+        if (mLeftDrawableAlignment == leftDrawableAlignment) {
+            return;
+        }
+        if (!mIsCustomLeftView) {
+            this.mLeftDrawableAlignment = leftDrawableAlignment;
+            ImageView imageView = (ImageView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_image_id);
+            TextView textView = (TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id);
+            setImageAndTextAlignment(mLeftDrawableAlignment, imageView, textView);
+        }
     }
 
     public int getLeftPadding() {
@@ -547,7 +702,21 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftPadding(int leftPadding) {
-        this.mLeftPadding = leftPadding;
+        if (mLeftPadding == leftPadding) {
+            return;
+        }
+        if (mLeftPadding > 0) {
+            this.mLeftPadding = leftPadding;
+            if (mIsCustomLeftView) {
+                RelativeLayout.LayoutParams leftParam = (LayoutParams) mLeftView.getLayoutParams();
+                leftParam.leftMargin = mLeftPadding;
+            } else {
+                FrameLayout frameLayout = (FrameLayout) mLeftView.getParent();
+                RelativeLayout.LayoutParams leftParam = (LayoutParams) frameLayout.getLayoutParams();
+                leftParam.leftMargin = mLeftPadding;
+            }
+            requestLayout();
+        }
     }
 
     public boolean isRightVisible() {
@@ -555,7 +724,15 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightVisible(boolean rightVisible) {
+        if (mRightVisibility == rightVisible) {
+            return;
+        }
         this.mRightVisibility = rightVisible;
+        if (mIsCustomRightView) {
+            mRightView.setVisibility(mRightVisibility ? VISIBLE : GONE);
+        } else {
+            ((FrameLayout) mRightView.getParent()).setVisibility(mRightVisibility ? VISIBLE : GONE);
+        }
     }
 
     public String getRightText() {
@@ -563,7 +740,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightText(String rightText) {
-        this.mRightText = rightText;
+        if (TextUtils.equals(mRightText, rightText)) {
+            return;
+        }
+        if (!mIsCustomRightView) {
+            this.mRightText = rightText;
+            ((TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id)).setText(mRightText);
+        }
     }
 
     public int getRightTextColor() {
@@ -571,7 +754,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightTextColor(int rightTextColor) {
-        this.mRightTextColor = rightTextColor;
+        if (mRightTextColor == rightTextColor) {
+            return;
+        }
+        if (!mIsCustomRightView) {
+            this.mRightTextColor = rightTextColor;
+            ((TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id)).setTextColor(mRightTextColor);
+        }
     }
 
     public float getRightTextSize() {
@@ -579,7 +768,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightTextSize(float rightTextSize) {
-        this.mRightTextSize = rightTextSize;
+        if (mRightTextSize == rightTextSize) {
+            return;
+        }
+        if (!mIsCustomRightView) {
+            this.mRightTextSize = rightTextSize;
+            ((TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id)).setTextSize(mRightTextSize);
+        }
     }
 
     public Drawable getRightDrawable() {
@@ -587,7 +782,13 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightDrawable(Drawable rightDrawable) {
-        this.mRightDrawable = rightDrawable;
+        if (mRightDrawable.equals(rightDrawable)) {
+            return;
+        }
+        if (!mIsCustomRightView) {
+            this.mRightDrawable = rightDrawable;
+            ((ImageView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_image_id)).setImageDrawable(mRightDrawable);
+        }
     }
 
     public int getRightDrawableAlignment() {
@@ -595,7 +796,15 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightDrawableAlignment(int rightDrawableAlignment) {
-        this.mRightDrawableAlignment = rightDrawableAlignment;
+        if (mRightDrawableAlignment == rightDrawableAlignment) {
+            return;
+        }
+        if (!mIsCustomRightView) {
+            this.mRightDrawableAlignment = rightDrawableAlignment;
+            ImageView imageView = (ImageView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_image_id);
+            TextView textView = (TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id);
+            setImageAndTextAlignment(mRightDrawableAlignment, imageView, textView);
+        }
     }
 
     public int getRightPadding() {
@@ -603,7 +812,21 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightPadding(int rightPadding) {
-        this.mRightPadding = rightPadding;
+        if (mRightPadding == rightPadding) {
+            return;
+        }
+        if (mRightPadding > 0) {
+            this.mRightPadding = rightPadding;
+            if (mIsCustomRightView) {
+                RelativeLayout.LayoutParams rightParam = (LayoutParams) mRightView.getLayoutParams();
+                rightParam.rightMargin = mRightPadding;
+            } else {
+                FrameLayout frameLayout = (FrameLayout) mRightView.getParent();
+                RelativeLayout.LayoutParams rightParam = (LayoutParams) frameLayout.getLayoutParams();
+                rightParam.rightMargin = mRightPadding;
+            }
+            requestLayout();
+        }
     }
 
     public View getTitleView() {
@@ -616,6 +839,41 @@ public class TopBar extends RelativeLayout {
 
     public View getRightView() {
         return mRightView;
+    }
+
+    public void setCustomTitleView(View titleView) {
+        if(titleView == null) {
+            return;
+        }
+        mTitleView = titleView;
+        mIsCustomTitleView = true;
+        mTitle = null;
+        mTitleVisibility = titleView.getVisibility() == VISIBLE;
+        setInternalViews();
+    }
+
+    public void setCustomLeftView(View leftView) {
+        if(leftView == null) {
+            return;
+        }
+        mLeftView = leftView;
+        mIsCustomLeftView = true;
+        mLeftText = null;
+        mLeftDrawable = null;
+        mLeftVisibility = leftView.getVisibility() == VISIBLE;
+        setInternalViews();
+    }
+
+    public void setCustomRightView(View rightView) {
+        if(rightView == null) {
+            return;
+        }
+        mRightView = rightView;
+        mIsCustomRightView = true;
+        mRightText = null;
+        mRightDrawable = null;
+        mRightVisibility = rightView.getVisibility() == VISIBLE;
+        setInternalViews();
     }
 
     public void setOnClickTopBarListener(OnClickListener onClickListener) {

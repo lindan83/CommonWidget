@@ -109,4 +109,21 @@
         <attr name="customLeftViewLayoutId"/>
         <attr name="customRightViewLayoutId"/>
     </declare-styleable>
+
+    <!--命令项View-->
+    <attr name="leftIcon" format="reference"/>
+    <attr name="text" format="string"/>
+    <attr name="textSize" format="dimension"/>
+    <attr name="textColor" format="color"/>
+    <attr name="rightIcon" format="reference"/>
+    <attr name="padding" format="dimension"/>
+    <declare-styleable name="OptionView">
+        <attr name="leftIcon"/>
+        <attr name="text"/>
+        <attr name="textSize"/>
+        <attr name="textColor"/>
+        <attr name="rightIcon"/>
+        <attr name="padding"/>
+        <attr name="internalSpacing"/>
+    </declare-styleable>
 </resources>
