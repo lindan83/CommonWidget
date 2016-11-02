@@ -2,6 +2,7 @@ package com.lance.widget.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.lance.common.util.ToastUtil;
 import com.lance.common.widget.TopBar;
@@ -34,7 +35,12 @@ public class CommonTopBarDemoActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
-        mTopBar.setLeftText("修改左边文字");
+    public void changeLeft(View v) {
+        mTopBar.setLeftText("新");
+        mTopBar.setLeftDrawable(getResources().getDrawable(R.mipmap.icon_shezhi));
+        mTopBar.setLeftPadding(200);
+        mTopBar.setLeftVisible(false);
     }
 }

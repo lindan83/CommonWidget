@@ -29,8 +29,8 @@ import com.lance.common.util.DensityUtil;
 public class TopBar extends RelativeLayout {
     private static final String TAG = "TopBar";
 
-    private static final int ALIGNMENT_LEFT_TO_TEXT = 0;//图片在文本左边
-    private static final int ALIGNMENT_RIGHT_TO_TEXT = 1;//图片在文本右边
+    public static final int ALIGNMENT_LEFT_TO_TEXT = 0;//图片在文本左边
+    public static final int ALIGNMENT_RIGHT_TO_TEXT = 1;//图片在文本右边
 
     private static final int DEFAULT_TOP_BAR_HEIGHT = 48;//默认TopBar高度dp
     private static final int DEFAULT_TITLE_TEXT_COLOR = Color.BLACK;//默认标题颜色
@@ -672,9 +672,6 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setLeftDrawable(Drawable leftDrawable) {
-        if (mLeftDrawable.equals(leftDrawable)) {
-            return;
-        }
         if (!mIsCustomLeftView) {
             this.mLeftDrawable = leftDrawable;
             ((ImageView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_image_id)).setImageDrawable(mLeftDrawable);
@@ -683,18 +680,6 @@ public class TopBar extends RelativeLayout {
 
     public int getLeftDrawableAlignment() {
         return mLeftDrawableAlignment;
-    }
-
-    public void setLeftDrawableAlignment(int leftDrawableAlignment) {
-        if (mLeftDrawableAlignment == leftDrawableAlignment) {
-            return;
-        }
-        if (!mIsCustomLeftView) {
-            this.mLeftDrawableAlignment = leftDrawableAlignment;
-            ImageView imageView = (ImageView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_image_id);
-            TextView textView = (TextView) mLeftView.findViewById(R.id.com_lance_common_widget_TopBar_left_text_id);
-            setImageAndTextAlignment(mLeftDrawableAlignment, imageView, textView);
-        }
     }
 
     public int getLeftPadding() {
@@ -782,9 +767,6 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setRightDrawable(Drawable rightDrawable) {
-        if (mRightDrawable.equals(rightDrawable)) {
-            return;
-        }
         if (!mIsCustomRightView) {
             this.mRightDrawable = rightDrawable;
             ((ImageView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_image_id)).setImageDrawable(mRightDrawable);
@@ -793,18 +775,6 @@ public class TopBar extends RelativeLayout {
 
     public int getRightDrawableAlignment() {
         return mRightDrawableAlignment;
-    }
-
-    public void setRightDrawableAlignment(int rightDrawableAlignment) {
-        if (mRightDrawableAlignment == rightDrawableAlignment) {
-            return;
-        }
-        if (!mIsCustomRightView) {
-            this.mRightDrawableAlignment = rightDrawableAlignment;
-            ImageView imageView = (ImageView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_image_id);
-            TextView textView = (TextView) mRightView.findViewById(R.id.com_lance_common_widget_TopBar_right_text_id);
-            setImageAndTextAlignment(mRightDrawableAlignment, imageView, textView);
-        }
     }
 
     public int getRightPadding() {
@@ -842,7 +812,7 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setCustomTitleView(View titleView) {
-        if(titleView == null) {
+        if (titleView == null) {
             return;
         }
         mTitleView = titleView;
@@ -853,7 +823,7 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setCustomLeftView(View leftView) {
-        if(leftView == null) {
+        if (leftView == null) {
             return;
         }
         mLeftView = leftView;
@@ -865,7 +835,7 @@ public class TopBar extends RelativeLayout {
     }
 
     public void setCustomRightView(View rightView) {
-        if(rightView == null) {
+        if (rightView == null) {
             return;
         }
         mRightView = rightView;
