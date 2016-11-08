@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.lance.common.util.ToastUtil;
+import com.lance.common.widget.OptionView;
 
 public class CommonOptionViewDemoActivity extends AppCompatActivity {
     private OptionView mOptionView;
