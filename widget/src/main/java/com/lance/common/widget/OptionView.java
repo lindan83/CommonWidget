@@ -9,9 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.view.Gravity;
 import android.widget.TextView;
 
 import com.lance.common.util.DensityUtil;
@@ -21,7 +19,7 @@ import com.lance.common.util.DensityUtil;
  * 命令选项View
  */
 
-public class OptionView extends RelativeLayout {
+public class OptionView extends TextView {
     private static final String TAG = "OptionView";
     private static final int DEFAULT_TEXT_SIZE = 14;//默认文本字体sp
     private static final int DEFAULT_TEXT_COLOR = Color.parseColor("#606060");//默认文本颜色
@@ -35,10 +33,6 @@ public class OptionView extends RelativeLayout {
     private int mTextColor;
     private int mPadding;
     private int mInternalSpacing;
-
-    private ImageView mLeftImageView;
-    private ImageView mRightImageView;
-    private TextView mTextView;
 
     public OptionView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -72,67 +66,25 @@ public class OptionView extends RelativeLayout {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_option_view, this, true);
-        setPadding(mPadding, mPadding, mPadding, mPadding);
+        setGravity(Gravity.CENTER_VERTICAL);
+        setPadding(mPadding, getPaddingTop(), mPadding, getPaddingBottom());
 
-        mLeftImageView = (ImageView) findViewById(R.id.iv_left_icon);
-        mTextView = (TextView) findViewById(R.id.iv_text);
-        mRightImageView = (ImageView) findViewById(R.id.iv_right_icon);
-
-        setViewParams();
-
-        if (mLeftIcon != null) {
-            mLeftImageView.setImageDrawable(mLeftIcon);
-            mLeftImageView.setVisibility(VISIBLE);
-        } else {
-            mLeftImageView.setImageDrawable(null);
-            mLeftImageView.setVisibility(GONE);
-        }
-
-        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mTextView.setTextColor(mTextColor);
+        setMaxLines(1);
+        setEllipsize(TextUtils.TruncateAt.END);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        setTextColor(mTextColor);
         if (!TextUtils.isEmpty(mText)) {
-            mTextView.setText(mText);
-            mTextView.setVisibility(VISIBLE);
-        } else {
-            mTextView.setText(null);
-            mTextView.setVisibility(GONE);
+            setText(mText);
+            setVisibility(VISIBLE);
         }
 
-        if (mRightIcon != null) {
-            mRightImageView.setImageDrawable(mRightIcon);
-            mRightImageView.setVisibility(VISIBLE);
-        } else {
-            mRightImageView.setImageDrawable(null);
-            mRightImageView.setVisibility(GONE);
+        if (mLeftIcon != null && mRightIcon != null) {
+            setCompoundDrawables(mLeftIcon, null, mRightIcon, null);
+        } else if (mLeftIcon != null) {
+            setCompoundDrawables(mLeftIcon, null, null, null);
+        } else if (mRightIcon != null) {
+            setCompoundDrawables(null, null, mRightIcon, null);
         }
-    }
-
-    private void setViewParams() {
-        RelativeLayout.LayoutParams leftImageParam = (LayoutParams) mLeftImageView.getLayoutParams();
-        RelativeLayout.LayoutParams textParam = (LayoutParams) mTextView.getLayoutParams();
-        RelativeLayout.LayoutParams rightImageParam = (LayoutParams) mRightImageView.getLayoutParams();
-
-        if (mInternalSpacing > 0) {
-            if (mLeftIcon != null) {
-                textParam.leftMargin = mInternalSpacing;
-            } else {
-                textParam.leftMargin = 0;
-            }
-            if (mRightIcon != null) {
-                textParam.rightMargin = mInternalSpacing;
-            } else {
-                textParam.rightMargin = 0;
-            }
-        }
-
-        if (mLeftIcon == null) {
-            textParam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        }
-
-        mLeftImageView.setLayoutParams(leftImageParam);
-        mTextView.setLayoutParams(textParam);
-        mRightImageView.setLayoutParams(rightImageParam);
     }
 
     public Drawable getLeftIcon() {
@@ -142,13 +94,10 @@ public class OptionView extends RelativeLayout {
     public void setLeftIcon(Drawable leftIcon) {
         this.mLeftIcon = leftIcon;
         if (mLeftIcon == null) {
-            mLeftImageView.setImageDrawable(null);
-            mLeftImageView.setVisibility(GONE);
+            setCompoundDrawables(null, null, getCompoundDrawables()[2], null);
         } else {
-            mLeftImageView.setImageDrawable(mLeftIcon);
-            mLeftImageView.setVisibility(VISIBLE);
+            setCompoundDrawables(mLeftIcon, null, getCompoundDrawables()[2], null);
         }
-        setViewParams();
     }
 
     public Drawable getRightIcon() {
@@ -158,13 +107,10 @@ public class OptionView extends RelativeLayout {
     public void setRightIcon(Drawable rightIcon) {
         this.mRightIcon = rightIcon;
         if (mRightIcon == null) {
-            mRightImageView.setImageDrawable(null);
-            mRightImageView.setVisibility(GONE);
+            setCompoundDrawables(getCompoundDrawables()[0], null, null, null);
         } else {
-            mRightImageView.setImageDrawable(mRightIcon);
-            mRightImageView.setVisibility(VISIBLE);
+            setCompoundDrawables(getCompoundDrawables()[0], null, mRightIcon, null);
         }
-        setViewParams();
     }
 
     public String getText() {
@@ -176,13 +122,7 @@ public class OptionView extends RelativeLayout {
             return;
         }
         this.mText = text;
-        if (TextUtils.isEmpty(mText)) {
-            mTextView.setText(null);
-            mTextView.setVisibility(GONE);
-        } else {
-            mTextView.setText(mText);
-            mTextView.setVisibility(VISIBLE);
-        }
+        setText(mText);
     }
 
     public float getTextSize() {
@@ -195,7 +135,7 @@ public class OptionView extends RelativeLayout {
         }
         if (textSize > 0) {
             this.mTextSize = textSize;
-            mTextView.setTextSize(textSize);
+            setTextSize(textSize);
         }
 
     }
@@ -205,11 +145,11 @@ public class OptionView extends RelativeLayout {
     }
 
     public void setTextColor(int textColor) {
-        if(mTextColor == textColor) {
+        if (mTextColor == textColor) {
             return;
         }
         this.mTextColor = textColor;
-        mTextView.setTextColor(mTextColor);
+        setTextColor(mTextColor);
     }
 
     public int getPadding() {
@@ -217,7 +157,7 @@ public class OptionView extends RelativeLayout {
     }
 
     public void setPadding(int padding) {
-        if(mPadding == padding) {
+        if (mPadding == padding) {
             return;
         }
         this.mPadding = padding;
@@ -229,12 +169,12 @@ public class OptionView extends RelativeLayout {
     }
 
     public void setInternalSpacing(int internalSpacing) {
-        if(mInternalSpacing == internalSpacing) {
+        if (mInternalSpacing == internalSpacing) {
             return;
         }
-        if(internalSpacing > 0) {
+        if (internalSpacing > 0) {
             this.mInternalSpacing = internalSpacing;
-            setViewParams();
+            setCompoundDrawablePadding(mInternalSpacing);
             requestLayout();
         }
     }
