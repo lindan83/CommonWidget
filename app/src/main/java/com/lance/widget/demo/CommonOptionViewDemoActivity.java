@@ -18,10 +18,10 @@ public class CommonOptionViewDemoActivity extends AppCompatActivity {
 
         mOptionView = (OptionView) findViewById(R.id.option_view);
 
-        mOptionView.setText("修改后的文字修改后的文字修改后的文字修改后的文字修改后的文字");
         mOptionView.setTextColor(Color.RED);
         mOptionView.setTextSize(18);
-        mOptionView.setLeftIcon(getResources().getDrawable(R.mipmap.icon_wodehangye));
+        mOptionView.setLeftIconResId(R.mipmap.icon_wodehangye);
+        mOptionView.setText("修改后的文字修改后的文字修改后的文字修改后的文字修改后的文字");
     }
 
     public void showDemo(View v) {

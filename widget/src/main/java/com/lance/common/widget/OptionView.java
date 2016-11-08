@@ -26,8 +26,8 @@ public class OptionView extends TextView {
     private static final int DEFAULT_LEFT_RIGHT_PADDING = 12;//默认左右内边距
     private static final int DEFAULT_INTERNAL_SPACING = 8;//默认Left Icon与Text的间距
 
-    private Drawable mLeftIcon;
-    private Drawable mRightIcon;
+    private int mLeftIconResId;
+    private int mRightIconResId;
     private String mText;
     private float mTextSize;
     private int mTextColor;
@@ -55,8 +55,8 @@ public class OptionView extends TextView {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.OptionView);
-        mLeftIcon = ta.getDrawable(R.styleable.OptionView_leftIcon);
-        mRightIcon = ta.getDrawable(R.styleable.OptionView_rightIcon);
+        mLeftIconResId = ta.getResourceId(R.styleable.OptionView_leftIcon, 0);
+        mRightIconResId = ta.getResourceId(R.styleable.OptionView_rightIcon, 0);
         mText = ta.getString(R.styleable.OptionView_text);
         mTextSize = ta.getDimension(R.styleable.OptionView_textSize, DensityUtil.sp2px(getContext(), DEFAULT_TEXT_SIZE));
         mTextColor = ta.getColor(R.styleable.OptionView_textColor, DEFAULT_TEXT_COLOR);
@@ -69,48 +69,53 @@ public class OptionView extends TextView {
         setGravity(Gravity.CENTER_VERTICAL);
         setPadding(mPadding, getPaddingTop(), mPadding, getPaddingBottom());
 
-        setMaxLines(1);
-        setEllipsize(TextUtils.TruncateAt.END);
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        setTextColor(mTextColor);
-        if (!TextUtils.isEmpty(mText)) {
-            setText(mText);
-            setVisibility(VISIBLE);
+        if (mLeftIconResId != 0 && mRightIconResId != 0) {
+            setCompoundDrawablesWithIntrinsicBounds(mLeftIconResId, 0, mRightIconResId, 0);
+        } else if (mLeftIconResId != 0) {
+            setCompoundDrawablesWithIntrinsicBounds(mLeftIconResId, 0, 0, 0);
+        } else if (mRightIconResId != 0) {
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, mRightIconResId, 0);
         }
 
-        if (mLeftIcon != null && mRightIcon != null) {
-            setCompoundDrawables(mLeftIcon, null, mRightIcon, null);
-        } else if (mLeftIcon != null) {
-            setCompoundDrawables(mLeftIcon, null, null, null);
-        } else if (mRightIcon != null) {
-            setCompoundDrawables(null, null, mRightIcon, null);
+        if(mInternalSpacing > 0) {
+            setCompoundDrawablePadding(mInternalSpacing);
         }
+
+        setMaxLines(1);
+        setEllipsize(TextUtils.TruncateAt.END);
+        super.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        super.setTextColor(mTextColor);
+        super.setText(mText);
     }
 
     public Drawable getLeftIcon() {
-        return mLeftIcon;
+        if (mLeftIconResId != 0) {
+            return getResources().getDrawable(mLeftIconResId);
+        }
+        return null;
     }
 
-    public void setLeftIcon(Drawable leftIcon) {
-        this.mLeftIcon = leftIcon;
-        if (mLeftIcon == null) {
-            setCompoundDrawables(null, null, getCompoundDrawables()[2], null);
-        } else {
-            setCompoundDrawables(mLeftIcon, null, getCompoundDrawables()[2], null);
-        }
+    public void setLeftIconResId(int leftIconId) {
+        this.mLeftIconResId = leftIconId;
+        setCompoundDrawablesWithIntrinsicBounds(mLeftIconResId, 0, mRightIconResId, 0);
     }
 
     public Drawable getRightIcon() {
-        return mRightIcon;
+        if (mRightIconResId != 0) {
+            return getResources().getDrawable(mRightIconResId);
+        }
+        return null;
     }
 
-    public void setRightIcon(Drawable rightIcon) {
-        this.mRightIcon = rightIcon;
-        if (mRightIcon == null) {
-            setCompoundDrawables(getCompoundDrawables()[0], null, null, null);
-        } else {
-            setCompoundDrawables(getCompoundDrawables()[0], null, mRightIcon, null);
-        }
+    public void setRightIconResId(int rightIconResId) {
+        this.mRightIconResId = rightIconResId;
+        setCompoundDrawablesWithIntrinsicBounds(mLeftIconResId, 0, mRightIconResId, 0);
+    }
+
+    public void setLeftAndRightIconResIds(int leftIconId, int rightIconId) {
+        this.mLeftIconResId = leftIconId;
+        this.mRightIconResId = rightIconId;
+        setCompoundDrawablesWithIntrinsicBounds(mLeftIconResId, 0, mRightIconResId, 0);
     }
 
     public String getText() {
@@ -137,7 +142,6 @@ public class OptionView extends TextView {
             this.mTextSize = textSize;
             setTextSize(textSize);
         }
-
     }
 
     public int getTextColor() {
