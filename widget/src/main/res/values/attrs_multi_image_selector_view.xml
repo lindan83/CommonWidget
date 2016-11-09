@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--多图选择控件-->
+    <attr name="numColumns" format="integer"/>
+    <attr name="imageSpacing" format="dimension"/>
+    <attr name="addImage" format="reference"/>
+    <attr name="imageMaxCount" format="integer"/>
+    <declare-styleable name="MultiImageSelectorView">
+        <attr name="numColumns"/>
+        <attr name="imageSpacing"/>
+        <attr name="addImage"/>
+        <attr name="imageMaxCount"/>
+    </declare-styleable>
+</resources>

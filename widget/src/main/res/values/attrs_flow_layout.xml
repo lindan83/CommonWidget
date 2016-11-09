@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="autoSelectEffect" format="boolean"/>
+    <attr name="maxSelect" format="integer"/>
+    <attr name="gravity">
+        <enum name="left" value="-1"/>
+        <enum name="center" value="0"/>
+        <enum name="right" value="1"/>
+    </attr>
+    <declare-styleable name="TagFlowLayout">
+        <attr name="autoSelectEffect"/>
+        <attr name="maxSelect"/>
+        <attr name="gravity"/>
+    </declare-styleable>
+</resources>
