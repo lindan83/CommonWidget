@@ -282,7 +282,6 @@ public class TopBar extends RelativeLayout {
             //设置右侧View 文本
             textView.setId(R.id.com_lance_common_widget_TopBar_right_id);
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            textView.setBackgroundColor(Color.RED);
             textView.setText(mRightText);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
             textView.setTextColor(mRightTextColor);
