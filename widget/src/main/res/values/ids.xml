@@ -3,10 +3,6 @@
     <item name="com_lance_common_widget_TopBar_title_id" type="id"/>
     <item name="com_lance_common_widget_TopBar_left_id" type="id"/>
     <item name="com_lance_common_widget_TopBar_right_id" type="id"/>
-    <item name="com_lance_common_widget_TopBar_left_image_id" type="id"/>
-    <item name="com_lance_common_widget_TopBar_left_text_id" type="id"/>
-    <item name="com_lance_common_widget_TopBar_right_image_id" type="id"/>
-    <item name="com_lance_common_widget_TopBar_right_text_id" type="id"/>
     <item name="com_lance_common_widget_TopBar_left_wrap_id" type="id"/>
     <item name="com_lance_common_widget_TopBar_right_wrap_id" type="id"/>
 </resources>

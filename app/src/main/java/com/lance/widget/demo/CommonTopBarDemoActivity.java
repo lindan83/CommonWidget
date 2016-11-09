@@ -16,6 +16,7 @@ public class CommonTopBarDemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_common_top_bar_demo);
 
         mTopBar = (TopBar) findViewById(R.id.top_bar);
+        //changeLeft(null);
 
         if (mTopBar != null) {
             mTopBar.setOnClickTopBarListener(new TopBar.OnClickListener() {
@@ -38,9 +39,18 @@ public class CommonTopBarDemoActivity extends AppCompatActivity {
     }
 
     public void changeLeft(View v) {
-        mTopBar.setLeftText("新");
+        mTopBar.setLeftText("");
         mTopBar.setLeftDrawable(getResources().getDrawable(R.mipmap.icon_shezhi));
-        mTopBar.setLeftPadding(200);
+        //mTopBar.setLeftDrawable(getResources().getDrawable(R.mipmap.icon_shezhi), TopBar.ALIGNMENT_RIGHT_TO_TEXT);
+        //mTopBar.setLeftPadding(200);
         mTopBar.setLeftVisible(false);
+    }
+
+    public void changeRight(View v) {
+        mTopBar.setRightText("搜索");
+        //mTopBar.setRightDrawable(getResources().getDrawable(R.mipmap.icon_shezhi));
+        mTopBar.setRightDrawable(getResources().getDrawable(R.mipmap.icon_shezhi), TopBar.ALIGNMENT_RIGHT_TO_TEXT);
+        //mTopBar.setRightPadding(200);
+        mTopBar.setRightVisible(false);
     }
 }
