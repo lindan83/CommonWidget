@@ -47,11 +47,6 @@ public class MultiImageSelectorView extends LinearLayout {
         mOnItemClickListener = onItemClickListener;
     }
 
-    public MultiImageSelectorView(Context context) {
-        super(context);
-        init();
-    }
-
     public MultiImageSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(context, attrs);

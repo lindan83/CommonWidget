@@ -21,10 +21,9 @@
         android:text="TopBar的自定义"
         android:textAllCaps="false"/>
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="@color/color_606060"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
 
     <Button
         android:id="@+id/btn_common_option_view_demo"
@@ -33,4 +32,15 @@
         android:onClick="showDemo"
         android:text="OptionView的一般使用"
         android:textAllCaps="false"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <Button
+        android:id="@+id/btn_multi_image_view_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="多图显示控件演示"/>
 </LinearLayout>

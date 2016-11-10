@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.lance.common.widget.MultiImageView
+        android:id="@+id/miv_multi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imageSpacing="2dp"
+        app:multiImageWidthPercent="0.9"
+        app:numColumns="4"
+        app:singleImageWidthPercent="0.8"/>
+
+    <com.lance.common.widget.MultiImageView
+        android:id="@+id/miv_single"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imageSpacing="2dp"
+        app:multiImageWidthPercent="0.9"
+        app:numColumns="4"
+        app:singleImageWidthPercent="0.8"/>
+</LinearLayout>

@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_common_option_view_demo:
                 startActivity(new Intent(this, CommonOptionViewDemoActivity.class));
                 break;
+            case R.id.btn_multi_image_view_demo:
+                startActivity(new Intent(this, MultiImageViewDemoActivity.class));
+                break;
         }
     }
 }

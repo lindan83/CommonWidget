@@ -11,4 +11,14 @@
         <attr name="addImage"/>
         <attr name="imageMaxCount"/>
     </declare-styleable>
+
+    <!--多图显示控件-->
+    <attr name="multiImageWidthPercent" format="float"/>
+    <attr name="singleImageWidthPercent" format="float"/>
+    <declare-styleable name="MultiImageView">
+        <attr name="numColumns"/>
+        <attr name="imageSpacing"/>
+        <attr name="multiImageWidthPercent"/>
+        <attr name="singleImageWidthPercent"/>
+    </declare-styleable>
 </resources>
