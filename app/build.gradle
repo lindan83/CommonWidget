@@ -27,5 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     testCompile 'junit:junit:4.12'
     compile project(':widget')
-    //compile 'com.lance.common:widget:1.0.1'
+    //compile 'com.lance.common:widget:1.0.4'
 }
