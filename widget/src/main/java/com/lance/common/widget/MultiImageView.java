@@ -94,8 +94,11 @@ public class MultiImageView extends LinearLayout {
             mPxOneMaxWH = (int) (mWidth * mWidthPercentSingle);//单图宽高
             initImageLayoutParams();
         }
-
         initView();
+    }
+
+    public List<String> getList() {
+        return mImageList;
     }
 
     @Override
