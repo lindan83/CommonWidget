@@ -43,4 +43,12 @@
         android:layout_height="wrap_content"
         android:onClick="showDemo"
         android:text="多图显示控件演示"/>
+
+    <Button
+        android:id="@+id/btn_swipe_layout_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="SwipeLayout演示"
+        android:textAllCaps="false"/>
 </LinearLayout>

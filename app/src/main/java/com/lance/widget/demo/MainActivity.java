@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_multi_image_view_demo:
                 startActivity(new Intent(this, MultiImageViewDemoActivity.class));
                 break;
+            case R.id.btn_swipe_layout_demo:
+                startActivity(new Intent(this, SwipeLayoutDemoActivity.class));
+                break;
         }
     }
 }
