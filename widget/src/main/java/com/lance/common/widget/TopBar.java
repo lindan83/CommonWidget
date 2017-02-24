@@ -275,7 +275,7 @@ public class TopBar extends RelativeLayout {
                 if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     textView.setCompoundDrawables(mLeftDrawable, null, null, null);
                 } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    textView.setCompoundDrawables(null, mLeftDrawable, null, null);
+                    textView.setCompoundDrawables(null, null, mLeftDrawable, null);
                 }
             }
         } else {
@@ -293,7 +293,7 @@ public class TopBar extends RelativeLayout {
                 if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     textView.setCompoundDrawables(mRightDrawable, null, null, null);
                 } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    textView.setCompoundDrawables(null, mRightDrawable, null, null);
+                    textView.setCompoundDrawables(null, null, mRightDrawable, null);
                 }
             }
         }
@@ -613,7 +613,7 @@ public class TopBar extends RelativeLayout {
 
     public void setLeftDrawable(Drawable leftDrawable, int alignment) {
         if (!mIsCustomLeftView) {
-            if(alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
+            if (alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
                 throw new IllegalArgumentException("alignment value must be ALIGNMENT_RIGHT_TO_TEXT or ALIGNMENT_LEFT_TO_TEXT");
             }
             this.mLeftDrawable = leftDrawable;
@@ -731,7 +731,7 @@ public class TopBar extends RelativeLayout {
 
     public void setRightDrawable(Drawable rightDrawable, int alignment) {
         if (!mIsCustomRightView) {
-            if(alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
+            if (alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
                 throw new IllegalArgumentException("alignment value must be ALIGNMENT_RIGHT_TO_TEXT or ALIGNMENT_LEFT_TO_TEXT");
             }
             this.mRightDrawable = rightDrawable;

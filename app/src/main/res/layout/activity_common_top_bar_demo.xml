@@ -99,9 +99,9 @@
         android:background="@color/colorPrimaryDark"
         app:leftDrawable="@mipmap/icon_back"
         app:leftDrawableAlignment="left"
-        app:leftVisibility="true"
         app:leftText="返回"
         app:leftTextColor="@android:color/white"
+        app:leftVisibility="true"
         app:rightDrawable="@mipmap/icon_sousuo"
         app:rightDrawableAlignment="right"
         app:rightText="查询"
@@ -111,16 +111,16 @@
         app:titleTextColor="@android:color/white"/>
 
     <Button
-        android:onClick="changeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
+        android:onClick="changeLeft"
         android:text="改变左侧"/>
 
     <Button
-        android:onClick="changeRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
+        android:onClick="changeRight"
         android:text="改变右侧"/>
 </LinearLayout>
