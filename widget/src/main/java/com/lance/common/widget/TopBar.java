@@ -292,7 +292,7 @@ public class TopBar extends RelativeLayout {
                 mRightDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
                 if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
                     textView.setCompoundDrawables(mRightDrawable, null, null, null);
-                } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
                     textView.setCompoundDrawables(null, mRightDrawable, null, null);
                 }
             }
