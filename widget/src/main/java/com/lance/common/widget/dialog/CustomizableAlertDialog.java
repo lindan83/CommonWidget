@@ -12,14 +12,23 @@ import com.lance.common.widget.R;
  * Created by lindan on 16-9-8.
  * 警告对话框工具
  */
-public class CustomizableAlertDialog implements View.OnClickListener {
+public class CustomizableAlertDialog implements IDialog, View.OnClickListener {
     private Context context;
     private android.app.AlertDialog ad;
     private TextView titleView;
     private TextView messageView;
     private TextView buttonView;
 
+    private OnClickListener onClickListener;
+    private OnShowListener onShowListener;
+    private OnDismissListener onDismissListener;
+    private OnCancelListener onCancelListener;
+
     public CustomizableAlertDialog(Context context) {
+        this(context, false, false);
+    }
+
+    public CustomizableAlertDialog(Context context, boolean cancelable, boolean canceledOnTouchOutside) {
         this.context = context;
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this.context);
         View view = LayoutInflater.from(this.context).inflate(R.layout.dialog_alert, null, false);
@@ -29,12 +38,13 @@ public class CustomizableAlertDialog implements View.OnClickListener {
         buttonView.setOnClickListener(this);
         builder.setView(view);
         ad = builder.create();
-        ad.setCancelable(false);
-        ad.setCanceledOnTouchOutside(false);
+        ad.setCancelable(cancelable);
+        ad.setCanceledOnTouchOutside(canceledOnTouchOutside);
     }
 
     public void setTitle(int resId) {
-        titleView.setText(context.getString(resId));
+        String text = context.getString(resId);
+        setTitle(text);
     }
 
     public void setTitle(String title) {
@@ -47,7 +57,8 @@ public class CustomizableAlertDialog implements View.OnClickListener {
     }
 
     public void setMessage(int resId) {
-        messageView.setText(context.getString(resId));
+        String text = context.getString(resId);
+        setMessage(text);
     }
 
     public void setMessage(String message) {
@@ -59,40 +70,110 @@ public class CustomizableAlertDialog implements View.OnClickListener {
         }
     }
 
-    /**
-     * 设置按钮
-     *
-     * @param text
-     * @param listener
-     */
-    public void setButton(String text, final View.OnClickListener listener) {
-        buttonView.setText(text);
-        if (listener != null) {
-            buttonView.setOnClickListener(listener);
+    @Override
+    public void setPositiveButton(String text) {
+        if (TextUtils.isEmpty(text)) {
+            buttonView.setVisibility(View.GONE);
+        } else {
+            buttonView.setVisibility(View.VISIBLE);
+            buttonView.setText(text);
         }
-        dismiss();
     }
 
-    /**
-     * 关闭对话框
-     */
+    @Override
+    public void setPositiveButton(int resId) {
+        String text = context.getString(resId);
+        setPositiveButton(text);
+    }
+
+    @Override
+    public void setNegativeButton(String text) {
+
+    }
+
+    @Override
+    public void setNegativeButton(int resId) {
+
+    }
+
+    @Override
+    public void setNeutralButton(String text) {
+
+    }
+
+    @Override
+    public void setNeutralButton(int resId) {
+
+    }
+
+    public void setCancelable(boolean cancelable) {
+        ad.setCancelable(cancelable);
+    }
+
+    public void setCanceledOnTouchOutside(boolean canceledOnTouchOutside) {
+        ad.setCanceledOnTouchOutside(canceledOnTouchOutside);
+    }
+
     public void dismiss() {
         if (ad.isShowing()) {
             ad.dismiss();
+            if (onDismissListener != null) {
+                onDismissListener.onDismiss(this);
+            }
         }
     }
 
     public void show() {
         if (!ad.isShowing()) {
             ad.show();
+            if (onShowListener != null) {
+                onShowListener.onShow(this);
+            }
         }
     }
 
     @Override
-    public void onClick(View view) {
-        final int id = view.getId();
+    public void cancel() {
+        if (ad.isShowing()) {
+            ad.cancel();
+            if (onCancelListener != null) {
+                onCancelListener.onCancel(this);
+            }
+        }
+    }
+
+    @Override
+    public void setOnCancelListener(OnCancelListener listener) {
+        this.onCancelListener = listener;
+    }
+
+    @Override
+    public void setOnDismissListener(OnDismissListener listener) {
+        this.onDismissListener = listener;
+    }
+
+    @Override
+    public void setOnShowListener(OnShowListener listener) {
+        this.onShowListener = listener;
+    }
+
+    @Override
+    public void setOnClickListener(OnClickListener listener) {
+        this.onClickListener = listener;
+    }
+
+    @Override
+    public void setOnKeyListener(OnKeyListener listener) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int id = v.getId();
         if (id == R.id.tv_positive_button) {
-            dismiss();
+            if (onClickListener != null) {
+                onClickListener.onClick(this, BUTTON_POSITIVE);
+            }
         }
     }
 }

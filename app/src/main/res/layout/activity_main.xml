@@ -51,4 +51,12 @@
         android:onClick="showDemo"
         android:text="SwipeLayout演示"
         android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btn_dialog_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="对话框演示"
+        android:textAllCaps="false"/>
 </LinearLayout>

@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_swipe_layout_demo:
                 startActivity(new Intent(this, SwipeLayoutDemoActivity.class));
                 break;
+            case R.id.btn_dialog_demo:
+                startActivity(new Intent(this, DialogDemoActivity.class));
+                break;
         }
     }
 }

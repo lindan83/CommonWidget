@@ -35,6 +35,8 @@
         </activity>
         <activity android:name=".ListViewDelDemoActivity">
         </activity>
+        <activity android:name=".DialogDemoActivity">
+        </activity>
     </application>
 
 </manifest>
