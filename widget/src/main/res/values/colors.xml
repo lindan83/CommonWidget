@@ -3,4 +3,7 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="color_F8F8F8">#f8f8f8</color>
     <color name="color_606060">#606060</color>
+
+    <color name="color_99_white">#99FFFFFF</color>
+    <color name="color_FF_white">#FFFFFFFF</color>
 </resources>

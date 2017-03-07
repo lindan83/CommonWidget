@@ -59,4 +59,12 @@
         android:onClick="showDemo"
         android:text="对话框演示"
         android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btn_banner_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDemo"
+        android:text="轮播图演示"
+        android:textAllCaps="false"/>
 </LinearLayout>

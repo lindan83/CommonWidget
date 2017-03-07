@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_dialog_demo:
                 startActivity(new Intent(this, DialogDemoActivity.class));
                 break;
+            case R.id.btn_banner_demo:
+                startActivity(new Intent(this, ImageBannerActivity.class));
+                break;
         }
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="showIndicator" format="boolean"/>
+    <attr name="indicatorSize" format="dimension"/>
+    <attr name="indicatorColor" format="reference"/>
+    <attr name="indicatorGravity">
+        <enum name="left" value="1"/>
+        <enum name="leftTop" value="2"/>
+        <enum name="leftBottom" value="3"/>
+        <enum name="top" value="4"/>
+        <enum name="topLeft" value="5"/>
+        <enum name="topRight" value="6"/>
+        <enum name="right" value="7"/>
+        <enum name="rightTop" value="8"/>
+        <enum name="rightBottom" value="9"/>
+        <enum name="bottom" value="10"/>
+        <enum name="bottomLeft" value="11"/>
+        <enum name="bottomRight" value="12"/>
+    </attr>
+    <attr name="indicatorMarginTop" format="dimension"/>
+    <attr name="indicatorMarginLeft" format="dimension"/>
+    <attr name="indicatorMarginRight" format="dimension"/>
+    <attr name="indicatorMarginBottom" format="dimension"/>
+    <attr name="indicatorMargin" format="dimension"/>
+    <declare-styleable name="ImageBannerLayout">
+        <!--是否显示指示器-->
+        <attr name="showIndicator"/>
+        <!--指示器大小-->
+        <attr name="indicatorSize"/>
+        <!--指示器颜色资源-->
+        <attr name="indicatorColor"/>
+        <!--指示器位置-->
+        <attr name="indicatorGravity"/>
+        <!--指示器Margin-->
+        <attr name="indicatorMarginTop"/>
+        <attr name="indicatorMarginLeft"/>
+        <attr name="indicatorMarginRight"/>
+        <attr name="indicatorMarginBottom"/>
+        <attr name="indicatorMargin"/>
+    </declare-styleable>
+</resources>
