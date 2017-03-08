@@ -39,6 +39,7 @@ public class ImageBannerLayout extends FrameLayout implements ImageBanner.ImageB
     private static final int DEFAULT_INDICATOR_SIZE_DP = 10;
     private static final int DEFAULT_INDICATOR_MARGIN_DP = 10;
 
+    private ImageBanner imageBanner;
     private LinearLayout indicatorContainer;
     private List<String> imageUrls;
     private int position;//当前索引
@@ -120,7 +121,7 @@ public class ImageBannerLayout extends FrameLayout implements ImageBanner.ImageB
 
     //初始化Banner
     private void initImageBannerViews() {
-        ImageBanner imageBanner = new ImageBanner(getContext());
+        imageBanner = new ImageBanner(getContext());
         FrameLayout.LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageBanner.setLayoutParams(lp);
         imageBanner.setImageUrls(imageUrls);
@@ -318,5 +319,13 @@ public class ImageBannerLayout extends FrameLayout implements ImageBanner.ImageB
      */
     public int getselectedPosition() {
         return position;
+    }
+
+    public LinearLayout getIndicatorContainer() {
+        return indicatorContainer;
+    }
+
+    public ImageBanner getImageBanner() {
+        return imageBanner;
     }
 }

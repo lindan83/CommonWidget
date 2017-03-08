@@ -2,10 +2,8 @@ package com.lance.common.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +15,7 @@ import com.lance.common.glideimageloader.GlideBitmapLoadingListener;
 import com.lance.common.glideimageloader.GlideImageLoader;
 import com.lance.common.util.ScreenUtil;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,24 +34,37 @@ public class ImageBanner extends ViewGroup {
     private int index;//当前滑动到的图片位置
     private int lastIndex = -1;//上一次的滑动位置，用于进行页面滑动判断
     private boolean autoScroll = true;//是否自动滑动
+    private boolean autoScrollBak = autoScroll;//自动滑动的备份
     private int autoScrollInterval = 2000;//自动滑动的间隔时间，单位秒
 
     private ImageBannerListener imageBannerListener;
 
-    private Handler handler = new Handler() {
+    private static class UIHandler extends Handler {
+        WeakReference<ImageBanner> ref;
+
+        UIHandler(ImageBanner imageBanner) {
+            ref = new WeakReference<>(imageBanner);
+        }
+
         @Override
         public void handleMessage(Message msg) {
+            ImageBanner imageBanner = ref.get();
+            if (imageBanner == null) {
+                removeMessages(MSG_AUTO_SCROLL);
+                return;
+            }
             if (msg.what == MSG_AUTO_SCROLL) {
-                if (++index >= imageUrls.size()) {
-                    index = 0;
+                if (++imageBanner.index >= imageBanner.imageUrls.size()) {
+                    imageBanner.index = 0;
                 }
-                //scrollTo(index * imageWidth, 0);
-                int scrollX = getScrollX();
-                scroller.startScroll(scrollX, 0, index * imageWidth - scrollX, 0, 200);
-                postInvalidate();
+                int scrollX = imageBanner.getScrollX();
+                imageBanner.scroller.startScroll(scrollX, 0, imageBanner.index * imageBanner.imageWidth - scrollX, 0, 200);
+                imageBanner.postInvalidate();
             }
         }
-    };
+    }
+
+    private UIHandler handler;
 
     /**
      * 滑动切换监听器
@@ -89,13 +101,8 @@ public class ImageBanner extends ViewGroup {
         init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ImageBanner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
-
     private void init() {
+        handler = new UIHandler(this);
         scroller = new Scroller(getContext());
         imageWidth = ScreenUtil.getScreenWidth(getContext());
         TimerTask timerTask = new TimerTask() {
@@ -171,6 +178,9 @@ public class ImageBanner extends ViewGroup {
                     scroller.abortAnimation();
                 }
                 downX = (int) event.getX();
+                //暂停自动滑动
+                autoScrollBak = autoScroll;
+                autoScroll = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveX = (int) event.getX();
@@ -192,10 +202,12 @@ public class ImageBanner extends ViewGroup {
                 int scrollX = getScrollX();
                 scroller.startScroll(scrollX, 0, index * imageWidth - scrollX, 0, 400);
                 postInvalidate();
-                //scrollTo(imageWidth * index, 0);
                 if (imageBannerListener != null) {
                     imageBannerListener.onSelected(index);
                 }
+                //恢复自动滑动
+                autoScroll = autoScrollBak;
+                autoScrollBak = autoScroll;
                 break;
         }
         return true;
