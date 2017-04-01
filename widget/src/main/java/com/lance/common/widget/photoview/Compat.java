@@ -1,8 +1,8 @@
 package com.lance.common.widget.photoview;
 
-import android.annotation.TargetApi;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,23 +17,12 @@ public class Compat {
         }
     }
 
-    @TargetApi(VERSION_CODES.JELLY_BEAN)
+    @RequiresApi(api = VERSION_CODES.JELLY_BEAN)
     private static void postOnAnimationJellyBean(View view, Runnable runnable) {
         view.postOnAnimation(runnable);
     }
 
     public static int getPointerIndex(int action) {
-        if (VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB)
-            return getPointerIndexHoneyComb(action);
-        else
-            return getPointerIndexEclair(action);
-    }
-
-    private static int getPointerIndexEclair(int action) {
-        return (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-    }
-
-    private static int getPointerIndexHoneyComb(int action) {
         return (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
     }
 }

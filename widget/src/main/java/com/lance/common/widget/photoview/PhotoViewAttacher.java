@@ -7,7 +7,6 @@ import android.graphics.Matrix.ScaleToFit;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -87,9 +86,9 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
      * Sets the ImageView's ScaleType to Matrix.
      */
     private static void setImageViewScaleTypeMatrix(ImageView imageView) {
-        /**
-         * PhotoView sets its own ScaleType to Matrix, then diverts all calls
-         * setScaleType to this.setScaleType automatically.
+        /*
+          PhotoView sets its own ScaleType to Matrix, then diverts all calls
+          setScaleType to this.setScaleType automatically.
          */
         if (null != imageView && !(imageView instanceof IPhotoView)) {
             if (!ScaleType.MATRIX.equals(imageView.getScaleType())) {
@@ -165,19 +164,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2,
                                            float velocityX, float velocityY) {
-                        if (mSingleFlingListener != null) {
-                            if (getScale() > DEFAULT_MIN_SCALE) {
-                                return false;
-                            }
-
-                            if (MotionEventCompat.getPointerCount(e1) > SINGLE_TOUCH
-                                    || MotionEventCompat.getPointerCount(e2) > SINGLE_TOUCH) {
-                                return false;
-                            }
-
-                            return mSingleFlingListener.onFling(e1, e2, velocityX, velocityY);
-                        }
-                        return false;
+                        return mSingleFlingListener != null && getScale() <= DEFAULT_MIN_SCALE && !(e1.getPointerCount() > SINGLE_TOUCH || e2.getPointerCount() > SINGLE_TOUCH) && mSingleFlingListener.onFling(e1, e2, velocityX, velocityY);
                     }
                 });
 
@@ -343,14 +330,14 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         mSuppMatrix.postTranslate(dx, dy);
         checkAndDisplayMatrix();
 
-        /**
-         * Here we decide whether to let the ImageView's parent to start taking
-         * over the touch event.
-         *
-         * First we check whether this function is enabled. We never want the
-         * parent to take over if we're scaling. We then check the edge we're
-         * on, and the direction of the scroll (i.e. if we're pulling against
-         * the edge, aka 'overscrolling', let the parent take over).
+        /*
+          Here we decide whether to let the ImageView's parent to start taking
+          over the touch event.
+
+          First we check whether this function is enabled. We never want the
+          parent to take over if we're scaling. We then check the edge we're
+          on, and the direction of the scroll (i.e. if we're pulling against
+          the edge, aka 'overscrolling', let the parent take over).
          */
         ViewParent parent = imageView.getParent();
         if (mAllowParentInterceptOnEdge && !mScaleDragDetector.isScaling() && !mBlockParentIntercept) {
@@ -389,12 +376,12 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
                 final int bottom = imageView.getBottom();
                 final int left = imageView.getLeft();
 
-                /**
-                 * We need to check whether the ImageView's bounds have changed.
-                 * This would be easier if we targeted API 11+ as we could just use
-                 * View.OnLayoutChangeListener. Instead we have to replicate the
-                 * work, keeping track of the ImageView's bounds and then checking
-                 * if the values change.
+                /*
+                  We need to check whether the ImageView's bounds have changed.
+                  This would be easier if we targeted API 11+ as we could just use
+                  View.OnLayoutChangeListener. Instead we have to replicate the
+                  work, keeping track of the ImageView's bounds and then checking
+                  if the values change.
                  */
                 if (top != mIvTop || bottom != mIvBottom || left != mIvLeft
                         || right != mIvRight) {
@@ -665,9 +652,9 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     private void checkImageViewScaleType() {
         ImageView imageView = getImageView();
 
-        /**
-         * PhotoView's getScaleType() will just divert to this.getScaleType() so
-         * only call if we're not attached to a PhotoView.
+        /*
+          PhotoView's getScaleType() will just divert to this.getScaleType() so
+          only call if we're not attached to a PhotoView.
          */
         if (null != imageView && !(imageView instanceof IPhotoView)) {
             if (!ScaleType.MATRIX.equals(imageView.getScaleType())) {
@@ -863,22 +850,17 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
 
             switch (mScaleType) {
                 case FIT_CENTER:
-                    mBaseMatrix
-                            .setRectToRect(mTempSrc, mTempDst, ScaleToFit.CENTER);
+                    mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.CENTER);
                     break;
-
                 case FIT_START:
                     mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.START);
                     break;
-
                 case FIT_END:
                     mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.END);
                     break;
-
                 case FIT_XY:
                     mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.FILL);
                     break;
-
                 default:
                     break;
             }

@@ -32,7 +32,6 @@ public class SwipeLayout extends ViewGroup {
     private int mScaleTouchSlop;//为了处理单击事件的冲突
     private int mMaxVelocity;//计算滑动速度用
     private int mPointerId;//多点触摸只算第一根手指的速度
-    private int mHeight;//自己的高度
     private int mRightMenuWidths;//右侧菜单宽度总和(最大滑动距离)
     private int mLimit;//滑动判定临界值（右侧菜单宽度的40%） 手指抬起时，超过了展开，没超过收起menu
 
@@ -170,7 +169,7 @@ public class SwipeLayout extends ViewGroup {
         setClickable(true);//令自己可点击，从而获取触摸事件
 
         mRightMenuWidths = 0;//由于ViewHolder的复用机制，每次这里要手动恢复初始值
-        mHeight = 0;
+        int mHeight = 0;
         int contentWidth = 0;//2016 11 09 add,适配GridLayoutManager，将以第一个子Item(即ContentItem)的宽度为控件宽度
         int childCount = getChildCount();
 
@@ -547,10 +546,7 @@ public class SwipeLayout extends ViewGroup {
     //展开时，禁止长按
     @Override
     public boolean performLongClick() {
-        if (Math.abs(getScrollX()) > mScaleTouchSlop) {
-            return false;
-        }
-        return super.performLongClick();
+        return Math.abs(getScrollX()) <= mScaleTouchSlop && super.performLongClick();
     }
 
     /**

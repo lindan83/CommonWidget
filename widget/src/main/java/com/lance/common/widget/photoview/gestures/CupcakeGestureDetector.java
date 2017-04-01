@@ -11,8 +11,8 @@ public class CupcakeGestureDetector implements GestureDetector {
     protected OnGestureListener mListener;
     float mLastTouchX;
     float mLastTouchY;
-    final float mTouchSlop;
-    final float mMinimumVelocity;
+    private final float mTouchSlop;
+    private final float mMinimumVelocity;
 
     @Override
     public void setOnGestureListener(OnGestureListener listener) {
