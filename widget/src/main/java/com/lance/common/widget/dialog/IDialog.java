@@ -5,7 +5,6 @@ import android.view.KeyEvent;
 /**
  * Created by lindan on 17-2-27.
  */
-
 public interface IDialog {
     int BUTTON_POSITIVE = -1;
     int BUTTON_NEGATIVE = -2;

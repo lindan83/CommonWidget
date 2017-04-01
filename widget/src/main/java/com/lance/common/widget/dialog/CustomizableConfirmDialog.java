@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.lance.common.widget.R;
@@ -45,6 +46,10 @@ public class CustomizableConfirmDialog implements IDialog, View.OnClickListener 
         ad = builder.create();
         ad.setCancelable(cancelable);
         ad.setCanceledOnTouchOutside(canceledOnTouchOutside);
+        Window window = ad.getWindow();
+        if(window != null) {
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+        }
     }
 
     public void setTitle(int resId) {
