@@ -88,7 +88,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (convertView != null) {
             V view = (V) views.get(id);
             if (view == null) {
-                view = (V) view.findViewById(id);
+                view = (V) convertView.findViewById(id);
                 views.put(id, view);
             }
             return view;
