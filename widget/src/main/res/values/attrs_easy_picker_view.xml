@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EasyPickerView">
+        <attr name="itemTextSize" format="dimension"/>
+        <attr name="itemTextColor" format="color"/>
+        <attr name="itemTextPadding" format="dimension"/>
+        <attr name="selectedItemTextMaxScale" format="float"/>
+        <attr name="textMinAlpha" format="float"/>
+        <attr name="recycleMode" format="boolean"/>
+        <attr name="maxShowNum" format="integer"/>
+    </declare-styleable>
+</resources>
