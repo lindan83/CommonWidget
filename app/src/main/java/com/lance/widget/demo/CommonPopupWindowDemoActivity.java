@@ -308,7 +308,7 @@ class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.MyViewHolder> {
         return data != null ? data.size() : 0;
     }
 
-    public String getItem(int position) {
+    String getItem(int position) {
         return data != null ? data.get(position) : null;
     }
 
