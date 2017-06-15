@@ -7,4 +7,9 @@
     <color name="red_ff4a57">#ff4a57</color>
     <color name="press">#efefef</color>
     <color name="normal">#ffffff</color>
+    <color name="orange_salmon">#EC5745</color>
+    <color name="bbbbbb_2.3">#bbbbbb</color>
+    <color name="black_deep">#FF000000</color>
+    <color name="gray_holo_light">#ffd0d0d0</color>
+    <color name="green_deep_color">#6fb30d</color>
 </resources>

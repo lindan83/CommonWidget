@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:textColor="#8f8f8f"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.lance.common.widget.EasyPickerView
+            android:id="@+id/epv_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:itemTextColor="#4aa4a4"
+            app:itemTextPadding="10dp"
+            app:itemTextSize="30sp"
+            app:maxShowNum="3"
+            app:recycleMode="true"
+            app:selectedItemTextMaxScale="2.0"
+            app:textMinAlpha="0.35"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="70dp"
+            android:text="h"
+            android:textColor="#4aa4a4"
+            android:textSize="20sp"/>
+
+        <com.lance.common.widget.EasyPickerView
+            android:id="@+id/epv_m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:itemTextColor="#e98d3c"
+            app:itemTextPadding="10dp"
+            app:itemTextSize="30sp"
+            app:maxShowNum="3"
+            app:recycleMode="false"
+            app:selectedItemTextMaxScale="2.0"
+            app:textMinAlpha="0.35"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="70dp"
+            android:text="m"
+            android:textColor="#e98d3c"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_h"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:hint="h"
+            android:inputType="numberSigned"
+            android:textColor="#4aa4a4"
+            android:textColorHint="#dedede"/>
+
+        <Button
+            android:id="@+id/btn_to_h"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="#4aa4a4"
+            android:text="move to"
+            android:textColor="#ffffff"/>
+
+        <Button
+            android:id="@+id/btn_by_h"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="#4aa4a4"
+            android:minHeight="0dp"
+            android:text="move by"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_m"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:hint="m"
+            android:inputType="numberSigned"
+            android:textColor="#4aa4a4"
+            android:textColorHint="#dedede"/>
+
+        <Button
+            android:id="@+id/btn_to_m"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="#e98d3c"
+            android:text="move to"
+            android:textColor="#ffffff"/>
+
+        <Button
+            android:id="@+id/btn_by_m"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="#e98d3c"
+            android:text="move by"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+</LinearLayout>

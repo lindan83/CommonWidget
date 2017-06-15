@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_banner_demo:
                 startActivity(new Intent(this, ImageBannerActivity.class));
                 break;
+            case R.id.btn_easy_picker_view_demo:
+                startActivity(new Intent(this, EasyPickerViewDemoActivity.class));
+                break;
+            case R.id.btn_popup_window_demo:
+                startActivity(new Intent(this, CommonPopupWindowDemoActivity.class));
+                break;
         }
     }
 }
