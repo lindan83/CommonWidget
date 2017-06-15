@@ -155,7 +155,6 @@ class PopupController {
     private PopupWindow popupWindow;
     View popupView;//弹窗布局View
     private View view;
-    private Window window;
 
     PopupController(Context context, PopupWindow popupWindow) {
         this.context = context;
@@ -207,7 +206,7 @@ class PopupController {
      * @param level 0.0f-1.0f
      */
     void setBackGroundLevel(float level) {
-        window = ((Activity) context).getWindow();
+        Window window = ((Activity) context).getWindow();
         WindowManager.LayoutParams params = window.getAttributes();
         params.alpha = level;
         window.setAttributes(params);
