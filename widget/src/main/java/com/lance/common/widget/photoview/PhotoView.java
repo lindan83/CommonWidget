@@ -11,9 +11,9 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 
 public class PhotoView extends AppCompatImageView implements IPhotoView {
-    private PhotoViewAttacher mAttacher;
+    private PhotoViewAttacher attacher;
 
-    private ScaleType mPendingScaleType;
+    private ScaleType pendingScaleType;
 
     public PhotoView(Context context) {
         this(context, null);
@@ -30,218 +30,218 @@ public class PhotoView extends AppCompatImageView implements IPhotoView {
     }
 
     protected void init() {
-        if (null == mAttacher || null == mAttacher.getImageView()) {
-            mAttacher = new PhotoViewAttacher(this);
+        if (null == attacher || null == attacher.getImageView()) {
+            attacher = new PhotoViewAttacher(this);
         }
 
-        if (null != mPendingScaleType) {
-            setScaleType(mPendingScaleType);
-            mPendingScaleType = null;
+        if (null != pendingScaleType) {
+            setScaleType(pendingScaleType);
+            pendingScaleType = null;
         }
     }
 
     @Override
     public void setRotationTo(float rotationDegree) {
-        mAttacher.setRotationTo(rotationDegree);
+        attacher.setRotationTo(rotationDegree);
     }
 
     @Override
     public void setRotationBy(float rotationDegree) {
-        mAttacher.setRotationBy(rotationDegree);
+        attacher.setRotationBy(rotationDegree);
     }
 
     @Override
     public boolean canZoom() {
-        return mAttacher.canZoom();
+        return attacher.canZoom();
     }
 
     @Override
     public RectF getDisplayRect() {
-        return mAttacher.getDisplayRect();
+        return attacher.getDisplayRect();
     }
 
     @Override
     public void getDisplayMatrix(Matrix matrix) {
-        mAttacher.getDisplayMatrix(matrix);
+        attacher.getDisplayMatrix(matrix);
     }
 
     @Override
     public boolean setDisplayMatrix(Matrix finalRectangle) {
-        return mAttacher.setDisplayMatrix(finalRectangle);
+        return attacher.setDisplayMatrix(finalRectangle);
     }
 
     @Override
     public float getMinimumScale() {
-        return mAttacher.getMinimumScale();
+        return attacher.getMinimumScale();
     }
 
     @Override
     public float getMediumScale() {
-        return mAttacher.getMediumScale();
+        return attacher.getMediumScale();
     }
 
     @Override
     public float getMaximumScale() {
-        return mAttacher.getMaximumScale();
+        return attacher.getMaximumScale();
     }
 
     @Override
     public float getScale() {
-        return mAttacher.getScale();
+        return attacher.getScale();
     }
 
     @Override
     public ScaleType getScaleType() {
-        return mAttacher.getScaleType();
+        return attacher.getScaleType();
     }
 
     @Override
     public Matrix getImageMatrix() {
-        return mAttacher.getImageMatrix();
+        return attacher.getImageMatrix();
     }
 
     @Override
     public void setAllowParentInterceptOnEdge(boolean allow) {
-        mAttacher.setAllowParentInterceptOnEdge(allow);
+        attacher.setAllowParentInterceptOnEdge(allow);
     }
 
     @Override
     public void setMinimumScale(float minimumScale) {
-        mAttacher.setMinimumScale(minimumScale);
+        attacher.setMinimumScale(minimumScale);
     }
 
     @Override
     public void setMediumScale(float mediumScale) {
-        mAttacher.setMediumScale(mediumScale);
+        attacher.setMediumScale(mediumScale);
     }
 
     @Override
     public void setMaximumScale(float maximumScale) {
-        mAttacher.setMaximumScale(maximumScale);
+        attacher.setMaximumScale(maximumScale);
     }
 
     @Override
     public void setScaleLevels(float minimumScale, float mediumScale, float maximumScale) {
-        mAttacher.setScaleLevels(minimumScale, mediumScale, maximumScale);
+        attacher.setScaleLevels(minimumScale, mediumScale, maximumScale);
     }
 
     @Override
     // setImageBitmap calls through to this method
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
-        if (null != mAttacher) {
-            mAttacher.update();
+        if (null != attacher) {
+            attacher.update();
         }
     }
 
     @Override
     public void setImageResource(int resId) {
         super.setImageResource(resId);
-        if (null != mAttacher) {
-            mAttacher.update();
+        if (null != attacher) {
+            attacher.update();
         }
     }
 
     @Override
     public void setImageURI(Uri uri) {
         super.setImageURI(uri);
-        if (null != mAttacher) {
-            mAttacher.update();
+        if (null != attacher) {
+            attacher.update();
         }
     }
 
     @Override
     protected boolean setFrame(int l, int t, int r, int b) {
         boolean changed = super.setFrame(l, t, r, b);
-        if (null != mAttacher) {
-            mAttacher.update();
+        if (null != attacher) {
+            attacher.update();
         }
         return changed;
     }
 
     @Override
     public void setOnMatrixChangeListener(PhotoViewAttacher.OnMatrixChangedListener listener) {
-        mAttacher.setOnMatrixChangeListener(listener);
+        attacher.setOnMatrixChangeListener(listener);
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mAttacher.setOnLongClickListener(l);
+        attacher.setOnLongClickListener(l);
     }
 
     @Override
     public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener listener) {
-        mAttacher.setOnPhotoTapListener(listener);
+        attacher.setOnPhotoTapListener(listener);
     }
 
     @Override
     public void setOnViewTapListener(PhotoViewAttacher.OnViewTapListener listener) {
-        mAttacher.setOnViewTapListener(listener);
+        attacher.setOnViewTapListener(listener);
     }
 
     @Override
     public void setScale(float scale) {
-        mAttacher.setScale(scale);
+        attacher.setScale(scale);
     }
 
     @Override
     public void setScale(float scale, boolean animate) {
-        mAttacher.setScale(scale, animate);
+        attacher.setScale(scale, animate);
     }
 
     @Override
     public void setScale(float scale, float focalX, float focalY, boolean animate) {
-        mAttacher.setScale(scale, focalX, focalY, animate);
+        attacher.setScale(scale, focalX, focalY, animate);
     }
 
     @Override
     public void setScaleType(ScaleType scaleType) {
-        if (null != mAttacher) {
-            mAttacher.setScaleType(scaleType);
+        if (null != attacher) {
+            attacher.setScaleType(scaleType);
         } else {
-            mPendingScaleType = scaleType;
+            pendingScaleType = scaleType;
         }
     }
 
     @Override
     public void setZoomable(boolean zoomable) {
-        mAttacher.setZoomable(zoomable);
+        attacher.setZoomable(zoomable);
     }
 
     @Override
     public Bitmap getVisibleRectangleBitmap() {
-        return mAttacher.getVisibleRectangleBitmap();
+        return attacher.getVisibleRectangleBitmap();
     }
 
     @Override
     public void setZoomTransitionDuration(int milliseconds) {
-        mAttacher.setZoomTransitionDuration(milliseconds);
+        attacher.setZoomTransitionDuration(milliseconds);
     }
 
     @Override
     public IPhotoView getIPhotoViewImplementation() {
-        return mAttacher;
+        return attacher;
     }
 
     @Override
     public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener newOnDoubleTapListener) {
-        mAttacher.setOnDoubleTapListener(newOnDoubleTapListener);
+        attacher.setOnDoubleTapListener(newOnDoubleTapListener);
     }
 
     @Override
     public void setOnScaleChangeListener(PhotoViewAttacher.OnScaleChangeListener onScaleChangeListener) {
-        mAttacher.setOnScaleChangeListener(onScaleChangeListener);
+        attacher.setOnScaleChangeListener(onScaleChangeListener);
     }
 
     @Override
     public void setOnSingleFlingListener(PhotoViewAttacher.OnSingleFlingListener onSingleFlingListener) {
-        mAttacher.setOnSingleFlingListener(onSingleFlingListener);
+        attacher.setOnSingleFlingListener(onSingleFlingListener);
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        mAttacher.cleanup();
-        mAttacher = null;
+        attacher.cleanup();
+        attacher = null;
         super.onDetachedFromWindow();
     }
 

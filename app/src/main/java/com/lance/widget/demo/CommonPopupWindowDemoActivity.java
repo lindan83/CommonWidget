@@ -49,7 +49,7 @@ public class CommonPopupWindowDemoActivity extends AppCompatActivity implements 
                 .setView(R.layout.popup_down)
                 .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setAnimationStyle(R.style.AnimDown)
-                .setViewOnclickListener(this)
+                .setViewOnClickListener(this)
                 .setOutsideTouchable(true)
                 .create();
         popupWindow.showAsDropDown(view);
@@ -62,7 +62,7 @@ public class CommonPopupWindowDemoActivity extends AppCompatActivity implements 
                 .setView(R.layout.popup_left_or_right)
                 .setWidthAndHeight(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setAnimationStyle(R.style.AnimHorizontal)
-                .setViewOnclickListener(this)
+                .setViewOnClickListener(this)
                 .create();
         popupWindow.showAsDropDown(view, view.getWidth(), -view.getHeight());
     }
@@ -74,7 +74,7 @@ public class CommonPopupWindowDemoActivity extends AppCompatActivity implements 
                 .setView(R.layout.popup_left_or_right)
                 .setWidthAndHeight(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setAnimationStyle(R.style.AnimRight)
-                .setViewOnclickListener(this)
+                .setViewOnClickListener(this)
                 .create();
         popupWindow.showAsDropDown(view, -popupWindow.getWidth(), -view.getHeight());
     }
@@ -91,7 +91,7 @@ public class CommonPopupWindowDemoActivity extends AppCompatActivity implements 
                 .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT, upView.getMeasuredHeight())
                 .setBackGroundLevel(0.5f)//取值范围0.0f-1.0f 值越小越暗
                 .setAnimationStyle(R.style.AnimUp)
-                .setViewOnclickListener(this)
+                .setViewOnClickListener(this)
                 .create();
         popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
     }
@@ -102,7 +102,7 @@ public class CommonPopupWindowDemoActivity extends AppCompatActivity implements 
         popupWindow = new CommonPopupWindow.Builder(this)
                 .setView(R.layout.popup_left_or_right)
                 .setWidthAndHeight(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                .setViewOnclickListener(this)
+                .setViewOnClickListener(this)
                 .create();
         popupWindow.showAsDropDown(view, 0, -(popupWindow.getHeight() + view.getMeasuredHeight()));
     }

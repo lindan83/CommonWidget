@@ -9,6 +9,6 @@ public class IcsScroller extends GingerScroller {
 
     @Override
     public boolean computeScrollOffset() {
-        return mScroller.computeScrollOffset();
+        return scroller.computeScrollOffset();
     }
 }

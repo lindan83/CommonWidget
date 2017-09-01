@@ -9,9 +9,8 @@ import android.widget.FrameLayout;
  * Created by lindan on 16-11-9.
  * 标签Tag
  */
-
 public class TagView extends FrameLayout implements Checkable {
-    private boolean mChecked;
+    private boolean checked;
     private static final int[] CHECK_STATE = new int[]{android.R.attr.state_checked};
 
     public TagView(Context context) {
@@ -39,8 +38,8 @@ public class TagView extends FrameLayout implements Checkable {
      */
     @Override
     public void setChecked(boolean checked) {
-        if (this.mChecked != checked) {
-            this.mChecked = checked;
+        if (this.checked != checked) {
+            this.checked = checked;
             refreshDrawableState();
         }
     }
@@ -50,7 +49,7 @@ public class TagView extends FrameLayout implements Checkable {
      */
     @Override
     public boolean isChecked() {
-        return mChecked;
+        return checked;
     }
 
     /**
@@ -58,6 +57,6 @@ public class TagView extends FrameLayout implements Checkable {
      */
     @Override
     public void toggle() {
-        setChecked(!mChecked);
+        setChecked(!checked);
     }
 }

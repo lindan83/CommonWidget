@@ -52,46 +52,46 @@ public class TopBar extends RelativeLayout {
     private static final float DEFAULT_INTERNAL_SPACING = 8;//默认标题、左侧、右侧之间的间距dp
 
     //标题相关
-    private String mTitle;
-    private int mTitleTextColor;
-    private float mTitleTextSize;
-    private boolean mTitleVisibility;
+    private String title;
+    private int titleTextColor;
+    private float titleTextSize;
+    private boolean titleVisibility;
 
     //左侧相关
-    private boolean mLeftVisibility;
-    private String mLeftText;
-    private int mLeftTextColor;
-    private float mLeftTextSize;
-    private Drawable mLeftDrawable;
-    private int mLeftDrawableAlignment;
-    private int mLeftPadding;
+    private boolean leftVisibility;
+    private String leftText;
+    private int leftTextColor;
+    private float leftTextSize;
+    private Drawable leftDrawable;
+    private int leftDrawableAlignment;
+    private int leftPadding;
 
     //右侧相关
-    private boolean mRightVisibility;
-    private String mRightText;
-    private int mRightTextColor;
-    private float mRightTextSize;
-    private Drawable mRightDrawable;
-    private int mRightDrawableAlignment;
-    private int mRightPadding;
+    private boolean rightVisibility;
+    private String rightText;
+    private int rightTextColor;
+    private float rightTextSize;
+    private Drawable rightDrawable;
+    private int rightDrawableAlignment;
+    private int rightPadding;
 
     //自定义相关
-    private int mCustomTitleViewLayoutId;
-    private int mCustomLeftViewLayoutId;
-    private int mCustomRightViewLayoutId;
+    private int customTitleViewLayoutId;
+    private int customLeftViewLayoutId;
+    private int customRightViewLayoutId;
 
     //其他参数
-    private int mInternalSpacing;//标题、左侧、右侧之间的间距
+    private int internalSpacing;//标题、左侧、右侧之间的间距
 
-    private View mTitleView;
-    private boolean mIsCustomTitleView;//是否自定义的TitleView
-    private View mLeftView;
-    private boolean mIsCustomLeftView;//是否自定义的LeftView
-    private View mRightView;
-    private boolean mIsCustomRightView;//是否自定义的RightView
+    private View titleView;
+    private boolean isCustomTitleView;//是否自定义的TitleView
+    private View leftView;
+    private boolean isCustomLeftView;//是否自定义的LeftView
+    private View rightView;
+    private boolean isCustomRightView;//是否自定义的RightView
 
-    private int mHeight;
-    private int mDrawableSize;
+    private int height;
+    private int drawableSize;
 
     public interface OnClickListener {
         void onClickLeft();
@@ -101,22 +101,22 @@ public class TopBar extends RelativeLayout {
         void onClickRight();
     }
 
-    private OnClickListener mOnClickListener;
-    private View.OnClickListener mInternalListener = new View.OnClickListener() {
+    private OnClickListener onClickListener;
+    private View.OnClickListener internalListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             final int id = view.getId();
             if (id == R.id.com_lance_common_widget_TopBar_title_id) {
-                if (findViewById(R.id.com_lance_common_widget_TopBar_title_id) != null && mOnClickListener != null) {
-                    mOnClickListener.onClickTitle();
+                if (findViewById(R.id.com_lance_common_widget_TopBar_title_id) != null && onClickListener != null) {
+                    onClickListener.onClickTitle();
                 }
             } else if (id == R.id.com_lance_common_widget_TopBar_left_id) {
-                if (findViewById(R.id.com_lance_common_widget_TopBar_left_id) != null && mOnClickListener != null) {
-                    mOnClickListener.onClickLeft();
+                if (findViewById(R.id.com_lance_common_widget_TopBar_left_id) != null && onClickListener != null) {
+                    onClickListener.onClickLeft();
                 }
             } else if (id == R.id.com_lance_common_widget_TopBar_right_id) {
-                if (findViewById(R.id.com_lance_common_widget_TopBar_right_id) != null && mOnClickListener != null) {
-                    mOnClickListener.onClickRight();
+                if (findViewById(R.id.com_lance_common_widget_TopBar_right_id) != null && onClickListener != null) {
+                    onClickListener.onClickRight();
                 }
             }
         }
@@ -143,39 +143,39 @@ public class TopBar extends RelativeLayout {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TopBar);
-        mTitle = ta.getString(R.styleable.TopBar_titleText);
-        mTitleTextColor = ta.getColor(R.styleable.TopBar_titleTextColor, DEFAULT_TITLE_TEXT_COLOR);
-        mTitleTextSize = ta.getDimension(R.styleable.TopBar_titleTextSize, DensityUtil.sp2px(context, DEFAULT_TITLE_TEXT_SIZE));
-        mTitleVisibility = ta.getBoolean(R.styleable.TopBar_titleVisibility, DEFAULT_TITLE_VISIBILITY);
+        title = ta.getString(R.styleable.TopBar_titleText);
+        titleTextColor = ta.getColor(R.styleable.TopBar_titleTextColor, DEFAULT_TITLE_TEXT_COLOR);
+        titleTextSize = ta.getDimension(R.styleable.TopBar_titleTextSize, DensityUtil.sp2px(context, DEFAULT_TITLE_TEXT_SIZE));
+        titleVisibility = ta.getBoolean(R.styleable.TopBar_titleVisibility, DEFAULT_TITLE_VISIBILITY);
 
-        mLeftVisibility = ta.getBoolean(R.styleable.TopBar_leftVisibility, DEFAULT_LEFT_VISIBILITY);
-        mLeftText = ta.getString(R.styleable.TopBar_leftText);
-        mLeftTextColor = ta.getColor(R.styleable.TopBar_leftTextColor, DEFAULT_LEFT_TEXT_COLOR);
-        mLeftTextSize = ta.getDimension(R.styleable.TopBar_leftTextSize, DensityUtil.sp2px(context, DEFAULT_LEFT_TEXT_SIZE));
-        mLeftDrawable = ta.getDrawable(R.styleable.TopBar_leftDrawable);
-        mLeftDrawableAlignment = ta.getInt(R.styleable.TopBar_leftDrawableAlignment, DEFAULT_LEFT_DRAWABLE_ALIGNMENT);
-        mLeftPadding = ta.getDimensionPixelSize(R.styleable.TopBar_leftPadding,
+        leftVisibility = ta.getBoolean(R.styleable.TopBar_leftVisibility, DEFAULT_LEFT_VISIBILITY);
+        leftText = ta.getString(R.styleable.TopBar_leftText);
+        leftTextColor = ta.getColor(R.styleable.TopBar_leftTextColor, DEFAULT_LEFT_TEXT_COLOR);
+        leftTextSize = ta.getDimension(R.styleable.TopBar_leftTextSize, DensityUtil.sp2px(context, DEFAULT_LEFT_TEXT_SIZE));
+        leftDrawable = ta.getDrawable(R.styleable.TopBar_leftDrawable);
+        leftDrawableAlignment = ta.getInt(R.styleable.TopBar_leftDrawableAlignment, DEFAULT_LEFT_DRAWABLE_ALIGNMENT);
+        leftPadding = ta.getDimensionPixelSize(R.styleable.TopBar_leftPadding,
                 DensityUtil.dp2px(context, DEFAULT_LEFT_PADDING));
 
-        mRightVisibility = ta.getBoolean(R.styleable.TopBar_rightVisibility, DEFAULT_RIGHT_VISIBILITY);
-        mRightText = ta.getString(R.styleable.TopBar_rightText);
-        mRightTextColor = ta.getColor(R.styleable.TopBar_rightTextColor, DEFAULT_RIGHT_TEXT_COLOR);
-        mRightTextSize = ta.getDimension(R.styleable.TopBar_rightTextSize, DensityUtil.sp2px(context, DEFAULT_RIGHT_TEXT_SIZE));
-        mRightDrawable = ta.getDrawable(R.styleable.TopBar_rightDrawable);
-        mRightDrawableAlignment = ta.getInt(R.styleable.TopBar_rightDrawableAlignment, DEFAULT_RIGHT_DRAWABLE_ALIGNMENT);
-        mRightPadding = ta.getDimensionPixelSize(R.styleable.TopBar_rightPadding,
+        rightVisibility = ta.getBoolean(R.styleable.TopBar_rightVisibility, DEFAULT_RIGHT_VISIBILITY);
+        rightText = ta.getString(R.styleable.TopBar_rightText);
+        rightTextColor = ta.getColor(R.styleable.TopBar_rightTextColor, DEFAULT_RIGHT_TEXT_COLOR);
+        rightTextSize = ta.getDimension(R.styleable.TopBar_rightTextSize, DensityUtil.sp2px(context, DEFAULT_RIGHT_TEXT_SIZE));
+        rightDrawable = ta.getDrawable(R.styleable.TopBar_rightDrawable);
+        rightDrawableAlignment = ta.getInt(R.styleable.TopBar_rightDrawableAlignment, DEFAULT_RIGHT_DRAWABLE_ALIGNMENT);
+        rightPadding = ta.getDimensionPixelSize(R.styleable.TopBar_rightPadding,
                 DensityUtil.dp2px(context, DEFAULT_RIGHT_PADDING));
 
-        mInternalSpacing = (int) ta.getDimension(R.styleable.TopBar_internalSpacing, DensityUtil.dp2px(context, DEFAULT_INTERNAL_SPACING));
+        internalSpacing = (int) ta.getDimension(R.styleable.TopBar_internalSpacing, DensityUtil.dp2px(context, DEFAULT_INTERNAL_SPACING));
 
-        mCustomTitleViewLayoutId = ta.getResourceId(R.styleable.TopBar_customTitleViewLayoutId, 0);
-        mCustomLeftViewLayoutId = ta.getResourceId(R.styleable.TopBar_customLeftViewLayoutId, 0);
-        mCustomRightViewLayoutId = ta.getResourceId(R.styleable.TopBar_customRightViewLayoutId, 0);
+        customTitleViewLayoutId = ta.getResourceId(R.styleable.TopBar_customTitleViewLayoutId, 0);
+        customLeftViewLayoutId = ta.getResourceId(R.styleable.TopBar_customLeftViewLayoutId, 0);
+        customRightViewLayoutId = ta.getResourceId(R.styleable.TopBar_customRightViewLayoutId, 0);
         ta.recycle();
 
-        mIsCustomTitleView = mCustomTitleViewLayoutId != 0;
-        mIsCustomLeftView = mCustomLeftViewLayoutId != 0;
-        mIsCustomRightView = mCustomRightViewLayoutId != 0;
+        isCustomTitleView = customTitleViewLayoutId != 0;
+        isCustomLeftView = customLeftViewLayoutId != 0;
+        isCustomRightView = customRightViewLayoutId != 0;
     }
 
     private void initViews() {
@@ -183,8 +183,8 @@ public class TopBar extends RelativeLayout {
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 getViewTreeObserver().removeOnPreDrawListener(this);
-                mHeight = getMeasuredHeight();
-                mDrawableSize = (int) ((mHeight - getPaddingTop() - getPaddingBottom()) * DEFAULT_IMAGE_SIZE_RATIO);
+                height = getMeasuredHeight();
+                drawableSize = (int) ((height - getPaddingTop() - getPaddingBottom()) * DEFAULT_IMAGE_SIZE_RATIO);
                 generateInternalViews();
                 return true;
             }
@@ -197,34 +197,34 @@ public class TopBar extends RelativeLayout {
      */
     private void generateInternalViews() {
         //如果用户指定了自定义的标题Layout，则优先选择自定义标题
-        if (mCustomTitleViewLayoutId != 0) {
-            mTitleView = LayoutInflater.from(getContext()).inflate(mCustomTitleViewLayoutId, null);
-            mTitleView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
-            mTitleView.setId(R.id.com_lance_common_widget_TopBar_title_id);
-            mTitleView.setOnClickListener(mInternalListener);
+        if (customTitleViewLayoutId != 0) {
+            titleView = LayoutInflater.from(getContext()).inflate(customTitleViewLayoutId, null);
+            titleView.setVisibility(titleVisibility ? VISIBLE : GONE);
+            titleView.setId(R.id.com_lance_common_widget_TopBar_title_id);
+            titleView.setOnClickListener(internalListener);
         }
-        if (mCustomLeftViewLayoutId != 0) {
-            mLeftView = LayoutInflater.from(getContext()).inflate(mCustomLeftViewLayoutId, null);
-            mLeftView.setVisibility(mLeftVisibility ? VISIBLE : GONE);
-            mLeftView.setId(R.id.com_lance_common_widget_TopBar_left_id);
-            mLeftView.setOnClickListener(mInternalListener);
+        if (customLeftViewLayoutId != 0) {
+            leftView = LayoutInflater.from(getContext()).inflate(customLeftViewLayoutId, null);
+            leftView.setVisibility(leftVisibility ? VISIBLE : GONE);
+            leftView.setId(R.id.com_lance_common_widget_TopBar_left_id);
+            leftView.setOnClickListener(internalListener);
         }
-        if (mCustomRightViewLayoutId != 0) {
-            mRightView = LayoutInflater.from(getContext()).inflate(mCustomRightViewLayoutId, null);
-            mRightView.setVisibility(mRightVisibility ? VISIBLE : GONE);
-            mRightView.setId(R.id.com_lance_common_widget_TopBar_right_id);
-            mRightView.setOnClickListener(mInternalListener);
+        if (customRightViewLayoutId != 0) {
+            rightView = LayoutInflater.from(getContext()).inflate(customRightViewLayoutId, null);
+            rightView.setVisibility(rightVisibility ? VISIBLE : GONE);
+            rightView.setId(R.id.com_lance_common_widget_TopBar_right_id);
+            rightView.setOnClickListener(internalListener);
         }
 
         //对于没有指定的自定义布局，则直接使用其他指定相关的属性构建
-        if (mTitleView == null) {
-            mTitleView = createDefaultTitleView();
+        if (titleView == null) {
+            titleView = createDefaultTitleView();
         }
-        if (mLeftView == null) {
-            mLeftView = createDefaultLeftOrRightView(true);
+        if (leftView == null) {
+            leftView = createDefaultLeftOrRightView(true);
         }
-        if (mRightView == null) {
-            mRightView = createDefaultLeftOrRightView(false);
+        if (rightView == null) {
+            rightView = createDefaultLeftOrRightView(false);
         }
         setInternalViews();
     }
@@ -237,15 +237,15 @@ public class TopBar extends RelativeLayout {
     private View createDefaultTitleView() {
         TextView titleTextView = new TextView(getContext());
         titleTextView.setId(R.id.com_lance_common_widget_TopBar_title_id);
-        if (mTitle != null) {
-            titleTextView.setText(mTitle);
+        if (title != null) {
+            titleTextView.setText(title);
         }
-        titleTextView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
-        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
-        titleTextView.setTextColor(mTitleTextColor);
+        titleTextView.setVisibility(titleVisibility ? VISIBLE : GONE);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
+        titleTextView.setTextColor(titleTextColor);
         titleTextView.setMaxLines(1);
         titleTextView.setEllipsize(TextUtils.TruncateAt.END);
-        titleTextView.setOnClickListener(mInternalListener);
+        titleTextView.setOnClickListener(internalListener);
         return titleTextView;
     }
 
@@ -264,51 +264,51 @@ public class TopBar extends RelativeLayout {
             //设置左侧View 文本
             textView.setId(R.id.com_lance_common_widget_TopBar_left_id);
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            textView.setText(mLeftText);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mLeftTextSize);
-            textView.setTextColor(mLeftTextColor);
+            textView.setText(leftText);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, leftTextSize);
+            textView.setTextColor(leftTextColor);
             textView.setMaxLines(1);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setCompoundDrawablePadding(mInternalSpacing / 2);
-            if (mLeftDrawable != null) {
-                mLeftDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-                if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                    textView.setCompoundDrawables(mLeftDrawable, null, null, null);
-                } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    textView.setCompoundDrawables(null, null, mLeftDrawable, null);
+            textView.setCompoundDrawablePadding(internalSpacing / 2);
+            if (leftDrawable != null) {
+                leftDrawable.setBounds(0, 0, drawableSize, drawableSize);
+                if (leftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                    textView.setCompoundDrawables(leftDrawable, null, null, null);
+                } else if (leftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                    textView.setCompoundDrawables(null, null, leftDrawable, null);
                 }
             }
         } else {
             //设置右侧View 文本
             textView.setId(R.id.com_lance_common_widget_TopBar_right_id);
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            textView.setText(mRightText);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
-            textView.setTextColor(mRightTextColor);
+            textView.setText(rightText);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, rightTextSize);
+            textView.setTextColor(rightTextColor);
             textView.setMaxLines(1);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setCompoundDrawablePadding(mInternalSpacing / 2);
-            if (mRightDrawable != null) {
-                mRightDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-                if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                    textView.setCompoundDrawables(mRightDrawable, null, null, null);
-                } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                    textView.setCompoundDrawables(null, null, mRightDrawable, null);
+            textView.setCompoundDrawablePadding(internalSpacing / 2);
+            if (rightDrawable != null) {
+                rightDrawable.setBounds(0, 0, drawableSize, drawableSize);
+                if (rightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                    textView.setCompoundDrawables(rightDrawable, null, null, null);
+                } else if (rightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                    textView.setCompoundDrawables(null, null, rightDrawable, null);
                 }
             }
         }
         if (left) {
-            wrapOuterLayout.setVisibility(mLeftVisibility ? VISIBLE : GONE);
-            if (TextUtils.isEmpty(mLeftText) && mLeftDrawable == null) {
+            wrapOuterLayout.setVisibility(leftVisibility ? VISIBLE : GONE);
+            if (TextUtils.isEmpty(leftText) && leftDrawable == null) {
                 wrapOuterLayout.setVisibility(GONE);
             }
         } else {
-            wrapOuterLayout.setVisibility(mRightVisibility ? VISIBLE : GONE);
-            if (TextUtils.isEmpty(mRightText) && mRightDrawable == null) {
+            wrapOuterLayout.setVisibility(rightVisibility ? VISIBLE : GONE);
+            if (TextUtils.isEmpty(rightText) && rightDrawable == null) {
                 wrapOuterLayout.setVisibility(GONE);
             }
         }
-        textView.setOnClickListener(mInternalListener);
+        textView.setOnClickListener(internalListener);
         wrapOuterLayout.addView(textView);
         return textView;
     }
@@ -319,11 +319,11 @@ public class TopBar extends RelativeLayout {
     private void setInternalViews() {
         removeAllViews();
         //设置标题
-        if (mIsCustomTitleView) {
+        if (isCustomTitleView) {
             //如果是自定义标题View
-            if (mTitleView != null) {
+            if (titleView != null) {
                 //先获取原布局参数
-                ViewGroup.LayoutParams oldTitleParams = mTitleView.getLayoutParams();
+                ViewGroup.LayoutParams oldTitleParams = titleView.getLayoutParams();
                 RelativeLayout.LayoutParams newTitleParams;
                 if (oldTitleParams != null) {
                     newTitleParams = new LayoutParams(oldTitleParams);
@@ -331,13 +331,13 @@ public class TopBar extends RelativeLayout {
                     newTitleParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 }
                 newTitleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-                mTitleView.setLayoutParams(newTitleParams);
-                addView(mTitleView);
+                titleView.setLayoutParams(newTitleParams);
+                addView(titleView);
             }
         } else {
             //如果不是自定义标题View
-            if (mTitleView != null) {
-                ViewGroup.LayoutParams oldTitleParams = mTitleView.getLayoutParams();
+            if (titleView != null) {
+                ViewGroup.LayoutParams oldTitleParams = titleView.getLayoutParams();
                 RelativeLayout.LayoutParams newTitleParams;
                 if (oldTitleParams != null) {
                     newTitleParams = new LayoutParams(oldTitleParams);
@@ -346,32 +346,32 @@ public class TopBar extends RelativeLayout {
                 }
                 newTitleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 //如果左侧不可见，或没有设置文本与图片
-                if (!mLeftVisibility || (TextUtils.isEmpty(mLeftText) && mLeftDrawable == null)) {
-                    if (mLeftPadding > 0) {
-                        newTitleParams.leftMargin = mLeftPadding;
+                if (!leftVisibility || (TextUtils.isEmpty(leftText) && leftDrawable == null)) {
+                    if (leftPadding > 0) {
+                        newTitleParams.leftMargin = leftPadding;
                     }
                 } else {
-                    newTitleParams.leftMargin = mInternalSpacing;
+                    newTitleParams.leftMargin = internalSpacing;
                 }
                 //如果右侧不可见，或没有设置文本与图片
-                if (!mRightVisibility || (TextUtils.isEmpty(mRightText) && mRightDrawable == null)) {
-                    if (mRightPadding > 0) {
-                        newTitleParams.rightMargin = mRightPadding;
+                if (!rightVisibility || (TextUtils.isEmpty(rightText) && rightDrawable == null)) {
+                    if (rightPadding > 0) {
+                        newTitleParams.rightMargin = rightPadding;
                     }
                 } else {
-                    newTitleParams.rightMargin = mInternalSpacing;
+                    newTitleParams.rightMargin = internalSpacing;
                 }
-                mTitleView.setLayoutParams(newTitleParams);
-                mTitleView.setOnClickListener(mInternalListener);
-                addView(mTitleView);
+                titleView.setLayoutParams(newTitleParams);
+                titleView.setOnClickListener(internalListener);
+                addView(titleView);
             }
         }
         //设置Left View
-        if (mIsCustomLeftView) {
+        if (isCustomLeftView) {
             //如果是自定义Left View
-            if (mLeftView != null) {
+            if (leftView != null) {
                 //先获取原布局参数，对于自定义View，只进行定位，不对其他参数进行干预
-                ViewGroup.LayoutParams oldLeftParams = mLeftView.getLayoutParams();
+                ViewGroup.LayoutParams oldLeftParams = leftView.getLayoutParams();
                 RelativeLayout.LayoutParams newLeftParams;
                 if (oldLeftParams != null) {
                     newLeftParams = new LayoutParams(oldLeftParams);
@@ -380,44 +380,44 @@ public class TopBar extends RelativeLayout {
                 }
                 newLeftParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 newLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                if (mLeftPadding > 0) {
-                    newLeftParams.leftMargin = mLeftPadding;
+                if (leftPadding > 0) {
+                    newLeftParams.leftMargin = leftPadding;
                 }
-                if (mTitleView != null && mTitleVisibility) {
+                if (titleView != null && titleVisibility) {
                     newLeftParams.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
-                    newLeftParams.rightMargin = mInternalSpacing;
+                    newLeftParams.rightMargin = internalSpacing;
                 }
-                mLeftView.setLayoutParams(newLeftParams);
-                addView(mLeftView);
+                leftView.setLayoutParams(newLeftParams);
+                addView(leftView);
             }
         } else {
             //如果不是自定义Left View
             //如果最外层包装的FrameLayout，设定边界
-            FrameLayout leftWrap = (FrameLayout) mLeftView.getParent();
+            FrameLayout leftWrap = (FrameLayout) leftView.getParent();
             //如果左侧的View外层是个FrameLayout，表明是默认创建的View
             LayoutParams wrapParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             wrapParam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             wrapParam.addRule(RelativeLayout.CENTER_VERTICAL);
             //如果标题存在且可见
-            if (mTitleVisibility && mTitleView != null && !TextUtils.isEmpty(mTitle)) {
+            if (titleVisibility && titleView != null && !TextUtils.isEmpty(title)) {
                 wrapParam.addRule(RelativeLayout.LEFT_OF, R.id.com_lance_common_widget_TopBar_title_id);
             }
-            if (mLeftPadding > 0) {
-                wrapParam.leftMargin = mLeftPadding;
+            if (leftPadding > 0) {
+                wrapParam.leftMargin = leftPadding;
             }
             FrameLayout.LayoutParams leftParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             leftParam.gravity = Gravity.LEFT;
-            mLeftView.setLayoutParams(leftParam);
+            leftView.setLayoutParams(leftParam);
             leftWrap.setLayoutParams(wrapParam);
             addView(leftWrap);
         }
         //设置Right View
-        if (mIsCustomRightView) {
+        if (isCustomRightView) {
             //如果是自定义Right View
             //如果是自定义Left View
-            if (mRightView != null) {
+            if (rightView != null) {
                 //先获取原布局参数，对于自定义View，只进行定位，不对其他参数进行干预
-                ViewGroup.LayoutParams oldRightParams = mRightView.getLayoutParams();
+                ViewGroup.LayoutParams oldRightParams = rightView.getLayoutParams();
                 RelativeLayout.LayoutParams newRightParams;
                 if (oldRightParams != null) {
                     newRightParams = new LayoutParams(oldRightParams);
@@ -426,35 +426,35 @@ public class TopBar extends RelativeLayout {
                 }
                 newRightParams.addRule(RelativeLayout.CENTER_VERTICAL);
                 newRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                if (mRightPadding > 0) {
-                    newRightParams.rightMargin = mRightPadding;
+                if (rightPadding > 0) {
+                    newRightParams.rightMargin = rightPadding;
                 }
-                if (mTitleView != null && mTitleVisibility) {
+                if (titleView != null && titleVisibility) {
                     newRightParams.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
-                    newRightParams.leftMargin = mInternalSpacing;
+                    newRightParams.leftMargin = internalSpacing;
                 }
-                mRightView.setLayoutParams(newRightParams);
-                addView(mRightView);
+                rightView.setLayoutParams(newRightParams);
+                addView(rightView);
             }
         } else {
             //如果不是自定义Right View
             //如果最外层包装的FrameLayout，设定边界
-            FrameLayout rightWrap = (FrameLayout) mRightView.getParent();
+            FrameLayout rightWrap = (FrameLayout) rightView.getParent();
             //如果右侧的View外层是个FrameLayout，表明是默认创建的View
             LayoutParams wrapParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             wrapParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             wrapParam.addRule(RelativeLayout.CENTER_VERTICAL);
             //如果标题存在且可见
-            if (mTitleVisibility && mTitleView != null && !TextUtils.isEmpty(mTitle)) {
+            if (titleVisibility && titleView != null && !TextUtils.isEmpty(title)) {
                 wrapParam.addRule(RelativeLayout.RIGHT_OF, R.id.com_lance_common_widget_TopBar_title_id);
             }
-            if (mRightPadding > 0) {
-                wrapParam.rightMargin = mRightPadding;
+            if (rightPadding > 0) {
+                wrapParam.rightMargin = rightPadding;
             }
             //设置RelativeLayout宽高自适应
             FrameLayout.LayoutParams rightViewParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             rightViewParam.gravity = Gravity.RIGHT;
-            mRightView.setLayoutParams(rightViewParam);
+            rightView.setLayoutParams(rightViewParam);
             rightWrap.setLayoutParams(wrapParam);
             addView(rightWrap);
         }
@@ -478,320 +478,320 @@ public class TopBar extends RelativeLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mHeight = h;
-        mDrawableSize = (int) ((mHeight - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
+        height = h;
+        drawableSize = (int) ((height - getPaddingBottom() - getPaddingTop()) * DEFAULT_IMAGE_SIZE_RATIO);
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        if (TextUtils.equals(mTitle, title)) {
+        if (TextUtils.equals(this.title, title)) {
             return;
         }
-        if (!mIsCustomTitleView) {
-            this.mTitle = title;
-            ((TextView) mTitleView).setText(mTitle);
+        if (!isCustomTitleView) {
+            this.title = title;
+            ((TextView) titleView).setText(this.title);
         }
     }
 
     public int getTitleTextColor() {
-        return mTitleTextColor;
+        return titleTextColor;
     }
 
     public void setTitleTextColor(int titleTextColor) {
-        if (mTitleTextColor == titleTextColor) {
+        if (this.titleTextColor == titleTextColor) {
             return;
         }
-        if (!mIsCustomTitleView) {
-            this.mTitleTextColor = titleTextColor;
-            ((TextView) mTitleView).setTextColor(mTitleTextColor);
+        if (!isCustomTitleView) {
+            this.titleTextColor = titleTextColor;
+            ((TextView) titleView).setTextColor(this.titleTextColor);
         }
     }
 
     public float getTitleTextSize() {
-        return mTitleTextSize;
+        return titleTextSize;
     }
 
     public void setTitleTextSize(float titleTextSize) {
-        if (mTitleTextSize == titleTextSize) {
+        if (this.titleTextSize == titleTextSize) {
             return;
         }
-        if (!mIsCustomTitleView) {
-            this.mTitleTextSize = titleTextSize;
-            ((TextView) mTitleView).setTextSize(mTitleTextSize);
+        if (!isCustomTitleView) {
+            this.titleTextSize = titleTextSize;
+            ((TextView) titleView).setTextSize(this.titleTextSize);
         }
     }
 
     public boolean isTitleVisible() {
-        return mTitleVisibility;
+        return titleVisibility;
     }
 
     public void setTitleVisible(boolean titleVisible) {
-        if (mTitleVisibility == titleVisible) {
+        if (titleVisibility == titleVisible) {
             return;
         }
-        this.mTitleVisibility = titleVisible;
-        mTitleView.setVisibility(mTitleVisibility ? VISIBLE : GONE);
+        this.titleVisibility = titleVisible;
+        titleView.setVisibility(titleVisibility ? VISIBLE : GONE);
     }
 
     public boolean isLeftVisible() {
-        return mLeftVisibility;
+        return leftVisibility;
     }
 
     public void setLeftVisible(boolean leftVisible) {
-        if (mLeftVisibility == leftVisible) {
+        if (leftVisibility == leftVisible) {
             return;
         }
-        this.mLeftVisibility = leftVisible;
-        if (mIsCustomLeftView) {
-            mLeftView.setVisibility(mLeftVisibility ? VISIBLE : GONE);
+        this.leftVisibility = leftVisible;
+        if (isCustomLeftView) {
+            leftView.setVisibility(leftVisibility ? VISIBLE : GONE);
         } else {
-            ((FrameLayout) mLeftView.getParent()).setVisibility(mLeftVisibility ? VISIBLE : GONE);
+            ((FrameLayout) leftView.getParent()).setVisibility(leftVisibility ? VISIBLE : GONE);
         }
     }
 
     public String getLeftText() {
-        return mLeftText;
+        return leftText;
     }
 
     public void setLeftText(String leftText) {
-        if (TextUtils.equals(mLeftText, leftText)) {
+        if (TextUtils.equals(this.leftText, leftText)) {
             return;
         }
-        if (!mIsCustomLeftView) {
-            this.mLeftText = leftText;
-            ((TextView) mLeftView).setText(mLeftText);
+        if (!isCustomLeftView) {
+            this.leftText = leftText;
+            ((TextView) leftView).setText(this.leftText);
         }
     }
 
     public int getLeftTextColor() {
-        return mLeftTextColor;
+        return leftTextColor;
     }
 
     public void setLeftTextColor(int leftTextColor) {
-        if (mLeftTextColor == leftTextColor) {
+        if (this.leftTextColor == leftTextColor) {
             return;
         }
-        if (!mIsCustomLeftView) {
-            this.mLeftTextColor = leftTextColor;
-            ((TextView) mLeftView).setTextColor(mLeftTextColor);
+        if (!isCustomLeftView) {
+            this.leftTextColor = leftTextColor;
+            ((TextView) leftView).setTextColor(this.leftTextColor);
         }
     }
 
     public float getLeftTextSize() {
-        return mLeftTextSize;
+        return leftTextSize;
     }
 
     public void setLeftTextSize(float leftTextSize) {
-        if (mLeftTextSize == leftTextSize) {
+        if (this.leftTextSize == leftTextSize) {
             return;
         }
-        if (!mIsCustomLeftView) {
-            this.mLeftTextSize = leftTextSize;
-            ((TextView) mLeftView).setTextSize(mLeftTextSize);
+        if (!isCustomLeftView) {
+            this.leftTextSize = leftTextSize;
+            ((TextView) leftView).setTextSize(this.leftTextSize);
         }
     }
 
     public Drawable getLeftDrawable() {
-        return mLeftDrawable;
+        return leftDrawable;
     }
 
     public void setLeftDrawable(Drawable leftDrawable) {
-        if (!mIsCustomLeftView) {
-            this.mLeftDrawable = leftDrawable;
-            this.mLeftDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-            final TextView textView = (TextView) mLeftView;
-            if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                textView.setCompoundDrawables(mLeftDrawable, null, null, null);
-            } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                textView.setCompoundDrawables(null, null, mLeftDrawable, null);
+        if (!isCustomLeftView) {
+            this.leftDrawable = leftDrawable;
+            this.leftDrawable.setBounds(0, 0, drawableSize, drawableSize);
+            final TextView textView = (TextView) leftView;
+            if (leftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                textView.setCompoundDrawables(this.leftDrawable, null, null, null);
+            } else if (leftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                textView.setCompoundDrawables(null, null, this.leftDrawable, null);
             }
         }
     }
 
     public void setLeftDrawable(Drawable leftDrawable, int alignment) {
-        if (!mIsCustomLeftView) {
+        if (!isCustomLeftView) {
             if (alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
                 throw new IllegalArgumentException("alignment value must be ALIGNMENT_RIGHT_TO_TEXT or ALIGNMENT_LEFT_TO_TEXT");
             }
-            this.mLeftDrawable = leftDrawable;
-            this.mLeftDrawableAlignment = alignment;
-            this.mLeftDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-            final TextView textView = (TextView) mLeftView;
-            if (mLeftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                textView.setCompoundDrawables(mLeftDrawable, null, null, null);
-            } else if (mLeftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                textView.setCompoundDrawables(null, null, mLeftDrawable, null);
+            this.leftDrawable = leftDrawable;
+            this.leftDrawableAlignment = alignment;
+            this.leftDrawable.setBounds(0, 0, drawableSize, drawableSize);
+            final TextView textView = (TextView) leftView;
+            if (leftDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                textView.setCompoundDrawables(this.leftDrawable, null, null, null);
+            } else if (leftDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                textView.setCompoundDrawables(null, null, this.leftDrawable, null);
             }
         }
     }
 
     public int getLeftDrawableAlignment() {
-        return mLeftDrawableAlignment;
+        return leftDrawableAlignment;
     }
 
     public int getLeftPadding() {
-        return mLeftPadding;
+        return leftPadding;
     }
 
     public void setLeftPadding(int leftPadding) {
-        if (mLeftPadding == leftPadding) {
+        if (this.leftPadding == leftPadding) {
             return;
         }
-        if (mLeftPadding > 0) {
-            this.mLeftPadding = leftPadding;
-            if (mIsCustomLeftView) {
-                RelativeLayout.LayoutParams leftParam = (LayoutParams) mLeftView.getLayoutParams();
-                leftParam.leftMargin = mLeftPadding;
+        if (this.leftPadding > 0) {
+            this.leftPadding = leftPadding;
+            if (isCustomLeftView) {
+                RelativeLayout.LayoutParams leftParam = (LayoutParams) leftView.getLayoutParams();
+                leftParam.leftMargin = this.leftPadding;
             } else {
-                FrameLayout frameLayout = (FrameLayout) mLeftView.getParent();
+                FrameLayout frameLayout = (FrameLayout) leftView.getParent();
                 RelativeLayout.LayoutParams leftParam = (LayoutParams) frameLayout.getLayoutParams();
-                leftParam.leftMargin = mLeftPadding;
+                leftParam.leftMargin = this.leftPadding;
             }
             requestLayout();
         }
     }
 
     public boolean isRightVisible() {
-        return mRightVisibility;
+        return rightVisibility;
     }
 
     public void setRightVisible(boolean rightVisible) {
-        if (mRightVisibility == rightVisible) {
+        if (rightVisibility == rightVisible) {
             return;
         }
-        this.mRightVisibility = rightVisible;
-        if (mIsCustomRightView) {
-            mRightView.setVisibility(mRightVisibility ? VISIBLE : GONE);
+        this.rightVisibility = rightVisible;
+        if (isCustomRightView) {
+            rightView.setVisibility(rightVisibility ? VISIBLE : GONE);
         } else {
-            ((FrameLayout) mRightView.getParent()).setVisibility(mRightVisibility ? VISIBLE : GONE);
+            ((FrameLayout) rightView.getParent()).setVisibility(rightVisibility ? VISIBLE : GONE);
         }
     }
 
     public String getRightText() {
-        return mRightText;
+        return rightText;
     }
 
     public void setRightText(String rightText) {
-        if (TextUtils.equals(mRightText, rightText)) {
+        if (TextUtils.equals(this.rightText, rightText)) {
             return;
         }
-        if (!mIsCustomRightView) {
-            this.mRightText = rightText;
-            ((TextView) mRightView).setText(mRightText);
+        if (!isCustomRightView) {
+            this.rightText = rightText;
+            ((TextView) rightView).setText(this.rightText);
         }
     }
 
     public int getRightTextColor() {
-        return mRightTextColor;
+        return rightTextColor;
     }
 
     public void setRightTextColor(int rightTextColor) {
-        if (mRightTextColor == rightTextColor) {
+        if (this.rightTextColor == rightTextColor) {
             return;
         }
-        if (!mIsCustomRightView) {
-            this.mRightTextColor = rightTextColor;
-            ((TextView) mRightView).setTextColor(mRightTextColor);
+        if (!isCustomRightView) {
+            this.rightTextColor = rightTextColor;
+            ((TextView) rightView).setTextColor(this.rightTextColor);
         }
     }
 
     public float getRightTextSize() {
-        return mRightTextSize;
+        return rightTextSize;
     }
 
     public void setRightTextSize(float rightTextSize) {
-        if (mRightTextSize == rightTextSize) {
+        if (this.rightTextSize == rightTextSize) {
             return;
         }
-        if (!mIsCustomRightView) {
-            this.mRightTextSize = rightTextSize;
-            ((TextView) mRightView).setTextSize(mRightTextSize);
+        if (!isCustomRightView) {
+            this.rightTextSize = rightTextSize;
+            ((TextView) rightView).setTextSize(this.rightTextSize);
         }
     }
 
     public Drawable getRightDrawable() {
-        return mRightDrawable;
+        return rightDrawable;
     }
 
     public void setRightDrawable(Drawable rightDrawable) {
-        if (!mIsCustomRightView) {
-            this.mRightDrawable = rightDrawable;
-            this.mRightDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-            final TextView textView = (TextView) mRightView;
-            if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                textView.setCompoundDrawables(mRightDrawable, null, null, null);
-            } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                textView.setCompoundDrawables(null, null, mRightDrawable, null);
+        if (!isCustomRightView) {
+            this.rightDrawable = rightDrawable;
+            this.rightDrawable.setBounds(0, 0, drawableSize, drawableSize);
+            final TextView textView = (TextView) rightView;
+            if (rightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                textView.setCompoundDrawables(this.rightDrawable, null, null, null);
+            } else if (rightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                textView.setCompoundDrawables(null, null, this.rightDrawable, null);
             }
         }
     }
 
     public void setRightDrawable(Drawable rightDrawable, int alignment) {
-        if (!mIsCustomRightView) {
+        if (!isCustomRightView) {
             if (alignment != ALIGNMENT_RIGHT_TO_TEXT && alignment != ALIGNMENT_LEFT_TO_TEXT) {
                 throw new IllegalArgumentException("alignment value must be ALIGNMENT_RIGHT_TO_TEXT or ALIGNMENT_LEFT_TO_TEXT");
             }
-            this.mRightDrawable = rightDrawable;
-            this.mRightDrawableAlignment = alignment;
-            this.mRightDrawable.setBounds(0, 0, mDrawableSize, mDrawableSize);
-            final TextView textView = (TextView) mRightView;
-            if (mRightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
-                textView.setCompoundDrawables(mRightDrawable, null, null, null);
-            } else if (mRightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
-                textView.setCompoundDrawables(null, null, mRightDrawable, null);
+            this.rightDrawable = rightDrawable;
+            this.rightDrawableAlignment = alignment;
+            this.rightDrawable.setBounds(0, 0, drawableSize, drawableSize);
+            final TextView textView = (TextView) rightView;
+            if (rightDrawableAlignment == ALIGNMENT_LEFT_TO_TEXT) {
+                textView.setCompoundDrawables(this.rightDrawable, null, null, null);
+            } else if (rightDrawableAlignment == ALIGNMENT_RIGHT_TO_TEXT) {
+                textView.setCompoundDrawables(null, null, this.rightDrawable, null);
             }
         }
     }
 
     public int getRightDrawableAlignment() {
-        return mRightDrawableAlignment;
+        return rightDrawableAlignment;
     }
 
     public int getRightPadding() {
-        return mRightPadding;
+        return rightPadding;
     }
 
     public void setRightPadding(int rightPadding) {
-        if (mRightPadding == rightPadding) {
+        if (this.rightPadding == rightPadding) {
             return;
         }
-        if (mRightPadding > 0) {
-            this.mRightPadding = rightPadding;
-            if (mIsCustomRightView) {
-                RelativeLayout.LayoutParams rightParam = (LayoutParams) mRightView.getLayoutParams();
-                rightParam.rightMargin = mRightPadding;
+        if (this.rightPadding > 0) {
+            this.rightPadding = rightPadding;
+            if (isCustomRightView) {
+                RelativeLayout.LayoutParams rightParam = (LayoutParams) rightView.getLayoutParams();
+                rightParam.rightMargin = this.rightPadding;
             } else {
-                FrameLayout frameLayout = (FrameLayout) mRightView.getParent();
+                FrameLayout frameLayout = (FrameLayout) rightView.getParent();
                 RelativeLayout.LayoutParams rightParam = (LayoutParams) frameLayout.getLayoutParams();
-                rightParam.rightMargin = mRightPadding;
+                rightParam.rightMargin = this.rightPadding;
             }
             requestLayout();
         }
     }
 
     public View getTitleView() {
-        return mTitleView;
+        return titleView;
     }
 
     public View getLeftView() {
-        return mLeftView;
+        return leftView;
     }
 
     public View getRightView() {
-        return mRightView;
+        return rightView;
     }
 
     public void setCustomTitleView(View titleView) {
         if (titleView == null) {
             return;
         }
-        mTitleView = titleView;
-        mIsCustomTitleView = true;
-        mTitle = null;
-        mTitleVisibility = titleView.getVisibility() == VISIBLE;
+        this.titleView = titleView;
+        isCustomTitleView = true;
+        title = null;
+        titleVisibility = titleView.getVisibility() == VISIBLE;
         setInternalViews();
     }
 
@@ -799,11 +799,11 @@ public class TopBar extends RelativeLayout {
         if (leftView == null) {
             return;
         }
-        mLeftView = leftView;
-        mIsCustomLeftView = true;
-        mLeftText = null;
-        mLeftDrawable = null;
-        mLeftVisibility = leftView.getVisibility() == VISIBLE;
+        this.leftView = leftView;
+        isCustomLeftView = true;
+        leftText = null;
+        leftDrawable = null;
+        leftVisibility = leftView.getVisibility() == VISIBLE;
         setInternalViews();
     }
 
@@ -811,15 +811,15 @@ public class TopBar extends RelativeLayout {
         if (rightView == null) {
             return;
         }
-        mRightView = rightView;
-        mIsCustomRightView = true;
-        mRightText = null;
-        mRightDrawable = null;
-        mRightVisibility = rightView.getVisibility() == VISIBLE;
+        this.rightView = rightView;
+        isCustomRightView = true;
+        rightText = null;
+        rightDrawable = null;
+        rightVisibility = rightView.getVisibility() == VISIBLE;
         setInternalViews();
     }
 
     public void setOnClickTopBarListener(OnClickListener onClickListener) {
-        this.mOnClickListener = onClickListener;
+        this.onClickListener = onClickListener;
     }
 }

@@ -317,7 +317,7 @@ public class ImageBannerLayout extends FrameLayout implements ImageBanner.ImageB
      *
      * @return 索引
      */
-    public int getselectedPosition() {
+    public int getSelectedPosition() {
         return position;
     }
 

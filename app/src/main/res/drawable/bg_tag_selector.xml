@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/green_deep_color"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/background_tab_pressed"/>
+
+            <padding android:bottom="10dp" android:left="12dp"
+                     android:right="12dp" android:top="10dp"/>
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/green_deep_color"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/background_tab_pressed"/>
+
+            <padding android:bottom="10dp" android:left="12dp"
+                     android:right="12dp" android:top="10dp"/>
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/green_deep_color"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/background_tab_pressed"/>
+
+            <padding android:bottom="10dp" android:left="12dp"
+                     android:right="12dp" android:top="10dp"/>
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/green_deep_color"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/background_tab_pressed"/>
+
+            <padding android:bottom="10dp" android:left="12dp"
+                     android:right="12dp" android:top="10dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/color_FF_white"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/background_tab_pressed"/>
+
+            <padding android:bottom="10dp" android:left="12dp"
+                     android:right="12dp" android:top="10dp"/>
+        </shape>
+    </item>
+</selector>

@@ -28,34 +28,34 @@ public class MultiImageView extends LinearLayout {
     private static final float DEFAULT_SINGLE_IMAGE_WIDTH_PERCENT = 0.7f;//默认显示单图时总宽度占比
 
     //宽度
-    private int mWidth;
+    private int width;
     //最大宽度
-    private int mMaxWidth;
+    private int maxWidth;
 
     // 照片的Url列表
-    private List<String> mImageList;
+    private List<String> imageList;
 
     //单位为Pixel
-    private int mPxOneMaxWH;  // 单张图最大允许宽高
-    private int mPxMoreWH = 0;// 多张图情况下每张图的宽高
-    private float mImageSpacing = DEFAULT_IMAGE_SPACING;//图片之间间隔
-    private int mPxImagePadding = DensityUtil.dp2px(getContext(), mImageSpacing);// 图片间的间距
+    private int pxOneMaxWH;  // 单张图最大允许宽高
+    private int pxMoreWH = 0;// 多张图情况下每张图的宽高
+    private float imageSpacing = DEFAULT_IMAGE_SPACING;//图片之间间隔
+    private int pxImagePadding = DensityUtil.dp2px(getContext(), imageSpacing);// 图片间的间距
 
-    private int mPerRowCount = DEFAULT_PER_ROW_COUNT;// 每行显示最大数
-    private float mWidthPercentMulti;//多图显示总宽度占比
-    private float mWidthPercentSingle;//单图显示总宽度占比
+    private int perRowCount = DEFAULT_PER_ROW_COUNT;// 每行显示最大数
+    private float widthPercentMulti;//多图显示总宽度占比
+    private float widthPercentSingle;//单图显示总宽度占比
 
     //单图的布局参数
-    private LayoutParams mOnePicParam;
+    private LayoutParams onePicParam;
     //多图的布局参数和第一列的布局参数
-    private LayoutParams mMorePicParam, mMoreColumnFirstParam;
+    private LayoutParams morePicParam, moreColumnFirstParam;
     //行布局参数(多图时)
-    private LayoutParams mRowParam;
+    private LayoutParams rowParam;
 
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener onItemClickListener;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
     public MultiImageView(Context context, AttributeSet attrs) {
@@ -76,10 +76,10 @@ public class MultiImageView extends LinearLayout {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MultiImageView);
-        mImageSpacing = typedArray.getDimension(R.styleable.MultiImageView_imageSpacing, DEFAULT_IMAGE_SPACING);//图片之间间隔
-        mPerRowCount = typedArray.getInt(R.styleable.MultiImageView_numColumns, DEFAULT_PER_ROW_COUNT);// 每行显示最大数
-        mWidthPercentMulti = typedArray.getFloat(R.styleable.MultiImageView_multiImageWidthPercent, DEFAULT_MULTI_IMAGE_WIDTH_PERCENT);
-        mWidthPercentSingle = typedArray.getFloat(R.styleable.MultiImageView_singleImageWidthPercent, DEFAULT_SINGLE_IMAGE_WIDTH_PERCENT);
+        imageSpacing = typedArray.getDimension(R.styleable.MultiImageView_imageSpacing, DEFAULT_IMAGE_SPACING);//图片之间间隔
+        perRowCount = typedArray.getInt(R.styleable.MultiImageView_numColumns, DEFAULT_PER_ROW_COUNT);// 每行显示最大数
+        widthPercentMulti = typedArray.getFloat(R.styleable.MultiImageView_multiImageWidthPercent, DEFAULT_MULTI_IMAGE_WIDTH_PERCENT);
+        widthPercentSingle = typedArray.getFloat(R.styleable.MultiImageView_singleImageWidthPercent, DEFAULT_SINGLE_IMAGE_WIDTH_PERCENT);
         typedArray.recycle();
     }
 
@@ -87,29 +87,29 @@ public class MultiImageView extends LinearLayout {
         if (lists == null) {
             throw new IllegalArgumentException("imageList is null...");
         }
-        mImageList = lists;
+        imageList = lists;
 
-        if (mMaxWidth > 0) {
-            mPxMoreWH = (mMaxWidth - mPxImagePadding * (mPerRowCount - 1)) / mPerRowCount; //解决右侧图片和内容对不齐问题
-            mPxOneMaxWH = (int) (mWidth * mWidthPercentSingle);//单图宽高
+        if (maxWidth > 0) {
+            pxMoreWH = (maxWidth - pxImagePadding * (perRowCount - 1)) / perRowCount; //解决右侧图片和内容对不齐问题
+            pxOneMaxWH = (int) (width * widthPercentSingle);//单图宽高
             initImageLayoutParams();
         }
         initView();
     }
 
     public List<String> getList() {
-        return mImageList;
+        return imageList;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mMaxWidth == 0) {
+        if (maxWidth == 0) {
             int width = measureWidth(widthMeasureSpec);
             if (width > 0) {
-                mWidth = width;
-                mMaxWidth = (int) (width * mWidthPercentMulti);
-                if (mImageList != null && mImageList.size() > 0) {
-                    setList(mImageList);
+                this.width = width;
+                maxWidth = (int) (width * widthPercentMulti);
+                if (imageList != null && imageList.size() > 0) {
+                    setList(imageList);
                 }
             }
         }
@@ -138,15 +138,15 @@ public class MultiImageView extends LinearLayout {
         int wrap = LayoutParams.WRAP_CONTENT;
         int match = LayoutParams.MATCH_PARENT;
 
-        //mOnePicParam = new LayoutParams(wrap, wrap);
+        //onePicParam = new LayoutParams(wrap, wrap);
         //单图的宽占一半宽度
-        mOnePicParam = new LayoutParams(mPxOneMaxWH, mPxOneMaxWH);
-        mOnePicParam.setMargins(0, 0, 0, 0);
-        mMoreColumnFirstParam = new LayoutParams(mPxMoreWH, mPxMoreWH);
-        mMorePicParam = new LayoutParams(mPxMoreWH, mPxMoreWH);
-        mMorePicParam.setMargins(mPxImagePadding, 0, 0, 0);
+        onePicParam = new LayoutParams(pxOneMaxWH, pxOneMaxWH);
+        onePicParam.setMargins(0, 0, 0, 0);
+        moreColumnFirstParam = new LayoutParams(pxMoreWH, pxMoreWH);
+        morePicParam = new LayoutParams(pxMoreWH, pxMoreWH);
+        morePicParam.setMargins(pxImagePadding, 0, 0, 0);
 
-        mRowParam = new LayoutParams(match, wrap);
+        rowParam = new LayoutParams(match, wrap);
     }
 
     /**
@@ -155,43 +155,43 @@ public class MultiImageView extends LinearLayout {
     private void initView() {
         this.setOrientation(VERTICAL);
         this.removeAllViews();
-        if (mMaxWidth == 0) {
+        if (maxWidth == 0) {
             //为了触发onMeasure()来测量MultiImageView的最大宽度，MultiImageView的宽设置为match_parent
             addView(new View(getContext()));
             return;
         }
 
-        if (mImageList == null || mImageList.size() == 0) {
+        if (imageList == null || imageList.size() == 0) {
             return;
         }
 
-        if (mImageList.size() == 1) {
+        if (imageList.size() == 1) {
             //单图的情况
             addView(createImageView(0, false));
         } else {
             //多图的情况
-            int allCount = mImageList.size();//图片数量
-            int rowCount = allCount / mPerRowCount
-                    + (allCount % mPerRowCount > 0 ? 1 : 0);// 行数
+            int allCount = imageList.size();//图片数量
+            int rowCount = allCount / perRowCount
+                    + (allCount % perRowCount > 0 ? 1 : 0);// 行数
             for (int rowCursor = 0; rowCursor < rowCount; rowCursor++) {
                 //每行是一个单独的水平线性布局
                 LinearLayout rowLayout = new LinearLayout(getContext());
                 rowLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-                rowLayout.setLayoutParams(mRowParam);
+                rowLayout.setLayoutParams(rowParam);
                 if (rowCursor != 0) {
-                    rowLayout.setPadding(0, mPxImagePadding, 0, 0);
+                    rowLayout.setPadding(0, pxImagePadding, 0, 0);
                 }
 
-                int columnCount = allCount % mPerRowCount == 0 ? mPerRowCount
-                        : allCount % mPerRowCount;//每行的列数
+                int columnCount = allCount % perRowCount == 0 ? perRowCount
+                        : allCount % perRowCount;//每行的列数
                 //如果不是最后一行，有可能出现不够3张图片的情况
                 if (rowCursor != rowCount - 1) {
-                    columnCount = mPerRowCount;
+                    columnCount = perRowCount;
                 }
                 addView(rowLayout);
 
-                int rowOffset = rowCursor * mPerRowCount;// 行偏移
+                int rowOffset = rowCursor * perRowCount;// 行偏移
                 for (int columnCursor = 0; columnCursor < columnCount; columnCursor++) {
                     int position = columnCursor + rowOffset;
                     rowLayout.addView(createImageView(position, true));
@@ -205,22 +205,22 @@ public class MultiImageView extends LinearLayout {
      *
      * @param position     位置
      * @param isMultiImage 是否多图模式
-     * @return
+     * @return ImageView
      */
     private ImageView createImageView(int position, final boolean isMultiImage) {
-        String url = mImageList.get(position);
+        String url = imageList.get(position);
         ImageView imageView = new ColorFilterImageView(getContext());
         if (isMultiImage) {
             //多图
             imageView.setScaleType(ScaleType.CENTER_CROP);
-            imageView.setLayoutParams(position % mPerRowCount == 0 ? mMoreColumnFirstParam : mMorePicParam);
+            imageView.setLayoutParams(position % perRowCount == 0 ? moreColumnFirstParam : morePicParam);
         } else {
             //单图
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ScaleType.CENTER_CROP);
-            imageView.setMaxHeight(mPxOneMaxWH);
-            imageView.setMaxWidth(mPxOneMaxWH);
-            imageView.setLayoutParams(mOnePicParam);
+            imageView.setMaxHeight(pxOneMaxWH);
+            imageView.setMaxWidth(pxOneMaxWH);
+            imageView.setLayoutParams(onePicParam);
         }
 
         imageView.setId(url.hashCode());
@@ -245,8 +245,8 @@ public class MultiImageView extends LinearLayout {
 
         @Override
         public void onClick(View view) {
-            if (mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(view, position);
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, position);
             }
         }
     }

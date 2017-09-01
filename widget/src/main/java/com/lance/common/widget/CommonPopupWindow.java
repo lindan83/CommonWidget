@@ -75,7 +75,7 @@ public class CommonPopupWindow extends PopupWindow {
          * @param listener ViewInterface
          * @return Builder
          */
-        public Builder setViewOnclickListener(ViewInterface listener) {
+        public Builder setViewOnClickListener(ViewInterface listener) {
             this.listener = listener;
             return this;
         }

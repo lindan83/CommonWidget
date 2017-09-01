@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
 public class FroyoGestureDetector extends EclairGestureDetector {
-    protected final ScaleGestureDetector mDetector;
+    protected final ScaleGestureDetector detector;
 
     public FroyoGestureDetector(Context context) {
         super(context);
@@ -16,7 +16,7 @@ public class FroyoGestureDetector extends EclairGestureDetector {
                 if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor)) {
                     return false;
                 }
-                mListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
+                listener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
                 return true;
             }
 
@@ -29,18 +29,18 @@ public class FroyoGestureDetector extends EclairGestureDetector {
             public void onScaleEnd(ScaleGestureDetector detector) {
             }
         };
-        mDetector = new ScaleGestureDetector(context, mScaleListener);
+        detector = new ScaleGestureDetector(context, mScaleListener);
     }
 
     @Override
     public boolean isScaling() {
-        return mDetector.isInProgress();
+        return detector.isInProgress();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         try {
-            mDetector.onTouchEvent(ev);
+            detector.onTouchEvent(ev);
             return super.onTouchEvent(ev);
         } catch (IllegalArgumentException e) {
             // Fix for support lib bug, happening when onDestroy is

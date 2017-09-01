@@ -8,26 +8,26 @@ import android.view.ViewConfiguration;
 public class CupcakeGestureDetector implements GestureDetector {
     private static final String TAG = "CupcakeGestureDetector";
 
-    protected OnGestureListener mListener;
-    float mLastTouchX;
-    float mLastTouchY;
-    private final float mTouchSlop;
-    private final float mMinimumVelocity;
+    protected OnGestureListener listener;
+    float lastTouchX;
+    float lastTouchY;
+    private final float touchSlop;
+    private final float minimumVelocity;
 
     @Override
     public void setOnGestureListener(OnGestureListener listener) {
-        this.mListener = listener;
+        this.listener = listener;
     }
 
     public CupcakeGestureDetector(Context context) {
         final ViewConfiguration configuration = ViewConfiguration
                 .get(context);
-        mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
-        mTouchSlop = configuration.getScaledTouchSlop();
+        minimumVelocity = configuration.getScaledMinimumFlingVelocity();
+        touchSlop = configuration.getScaledTouchSlop();
     }
 
-    private VelocityTracker mVelocityTracker;
-    private boolean mIsDragging;
+    private VelocityTracker velocityTracker;
+    private boolean isDragging;
 
     float getActiveX(MotionEvent ev) {
         return ev.getX();
@@ -44,42 +44,42 @@ public class CupcakeGestureDetector implements GestureDetector {
 
     @Override
     public boolean isDragging() {
-        return mIsDragging;
+        return isDragging;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                mVelocityTracker = VelocityTracker.obtain();
-                if (null != mVelocityTracker) {
-                    mVelocityTracker.addMovement(ev);
+                velocityTracker = VelocityTracker.obtain();
+                if (null != velocityTracker) {
+                    velocityTracker.addMovement(ev);
                 }
 
-                mLastTouchX = getActiveX(ev);
-                mLastTouchY = getActiveY(ev);
-                mIsDragging = false;
+                lastTouchX = getActiveX(ev);
+                lastTouchY = getActiveY(ev);
+                isDragging = false;
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
                 final float x = getActiveX(ev);
                 final float y = getActiveY(ev);
-                final float dx = x - mLastTouchX, dy = y - mLastTouchY;
+                final float dx = x - lastTouchX, dy = y - lastTouchY;
 
-                if (!mIsDragging) {
+                if (!isDragging) {
                     // Use Pythagoras to see if drag length is larger than
                     // touch slop
-                    mIsDragging = Math.sqrt((dx * dx) + (dy * dy)) >= mTouchSlop;
+                    isDragging = Math.sqrt((dx * dx) + (dy * dy)) >= touchSlop;
                 }
 
-                if (mIsDragging) {
-                    mListener.onDrag(dx, dy);
-                    mLastTouchX = x;
-                    mLastTouchY = y;
+                if (isDragging) {
+                    listener.onDrag(dx, dy);
+                    lastTouchX = x;
+                    lastTouchY = y;
 
-                    if (null != mVelocityTracker) {
-                        mVelocityTracker.addMovement(ev);
+                    if (null != velocityTracker) {
+                        velocityTracker.addMovement(ev);
                     }
                 }
                 break;
@@ -87,39 +87,39 @@ public class CupcakeGestureDetector implements GestureDetector {
 
             case MotionEvent.ACTION_CANCEL: {
                 // Recycle Velocity Tracker
-                if (null != mVelocityTracker) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
+                if (null != velocityTracker) {
+                    velocityTracker.recycle();
+                    velocityTracker = null;
                 }
                 break;
             }
 
             case MotionEvent.ACTION_UP: {
-                if (mIsDragging) {
-                    if (null != mVelocityTracker) {
-                        mLastTouchX = getActiveX(ev);
-                        mLastTouchY = getActiveY(ev);
+                if (isDragging) {
+                    if (null != velocityTracker) {
+                        lastTouchX = getActiveX(ev);
+                        lastTouchY = getActiveY(ev);
 
                         // Compute velocity within the last 1000ms
-                        mVelocityTracker.addMovement(ev);
-                        mVelocityTracker.computeCurrentVelocity(1000);
+                        velocityTracker.addMovement(ev);
+                        velocityTracker.computeCurrentVelocity(1000);
 
-                        final float vX = mVelocityTracker.getXVelocity(), vY = mVelocityTracker
+                        final float vX = velocityTracker.getXVelocity(), vY = velocityTracker
                                 .getYVelocity();
 
                         // If the velocity is greater than minVelocity, call
                         // listener
-                        if (Math.max(Math.abs(vX), Math.abs(vY)) >= mMinimumVelocity) {
-                            mListener.onFling(mLastTouchX, mLastTouchY, -vX,
+                        if (Math.max(Math.abs(vX), Math.abs(vY)) >= minimumVelocity) {
+                            listener.onFling(lastTouchX, lastTouchY, -vX,
                                     -vY);
                         }
                     }
                 }
 
                 // Recycle Velocity Tracker
-                if (null != mVelocityTracker) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
+                if (null != velocityTracker) {
+                    velocityTracker.recycle();
+                    velocityTracker = null;
                 }
                 break;
             }

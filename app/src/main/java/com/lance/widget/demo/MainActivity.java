@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_popup_window_demo:
                 startActivity(new Intent(this, CommonPopupWindowDemoActivity.class));
                 break;
+            case R.id.btn_flow_layout_demo:
+                startActivity(new Intent(this, FlowLayoutDemoActivity.class));
+                break;
         }
     }
 }

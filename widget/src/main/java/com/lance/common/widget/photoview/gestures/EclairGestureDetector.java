@@ -8,8 +8,8 @@ import com.lance.common.widget.photoview.Compat;
 public class EclairGestureDetector extends CupcakeGestureDetector {
 
     private static final int INVALID_POINTER_ID = -1;
-    private int mActivePointerId = INVALID_POINTER_ID;
-    private int mActivePointerIndex = 0;
+    private int activePointerId = INVALID_POINTER_ID;
+    private int activePointerIndex = 0;
 
     public EclairGestureDetector(Context context) {
         super(context);
@@ -18,7 +18,7 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
     @Override
     float getActiveX(MotionEvent ev) {
         try {
-            return ev.getX(mActivePointerIndex);
+            return ev.getX(activePointerIndex);
         } catch (Exception e) {
             return ev.getX();
         }
@@ -27,7 +27,7 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
     @Override
     float getActiveY(MotionEvent ev) {
         try {
-            return ev.getY(mActivePointerIndex);
+            return ev.getY(activePointerIndex);
         } catch (Exception e) {
             return ev.getY();
         }
@@ -38,11 +38,11 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
         final int action = ev.getAction();
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                mActivePointerId = ev.getPointerId(0);
+                activePointerId = ev.getPointerId(0);
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                mActivePointerId = INVALID_POINTER_ID;
+                activePointerId = INVALID_POINTER_ID;
                 break;
             case MotionEvent.ACTION_POINTER_UP:
                 // Ignore deprecation, ACTION_POINTER_ID_MASK and
@@ -50,19 +50,19 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
                 // You can have either deprecation or lint target api warning
                 final int pointerIndex = Compat.getPointerIndex(ev.getAction());
                 final int pointerId = ev.getPointerId(pointerIndex);
-                if (pointerId == mActivePointerId) {
+                if (pointerId == activePointerId) {
                     // This was our active pointer going up. Choose a new
                     // active pointer and adjust accordingly.
                     final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mActivePointerId = ev.getPointerId(newPointerIndex);
-                    mLastTouchX = ev.getX(newPointerIndex);
-                    mLastTouchY = ev.getY(newPointerIndex);
+                    activePointerId = ev.getPointerId(newPointerIndex);
+                    lastTouchX = ev.getX(newPointerIndex);
+                    lastTouchY = ev.getY(newPointerIndex);
                 }
                 break;
         }
 
-        mActivePointerIndex = ev
-                .findPointerIndex(mActivePointerId != INVALID_POINTER_ID ? mActivePointerId
+        activePointerIndex = ev
+                .findPointerIndex(activePointerId != INVALID_POINTER_ID ? activePointerId
                         : 0);
         try {
             return super.onTouchEvent(ev);

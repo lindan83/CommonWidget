@@ -4,40 +4,40 @@ import android.content.Context;
 import android.widget.OverScroller;
 
 public class GingerScroller extends ScrollerProxy {
-    protected final OverScroller mScroller;
+    protected final OverScroller scroller;
 
     public GingerScroller(Context context) {
-        mScroller = new OverScroller(context);
+        scroller = new OverScroller(context);
     }
 
     @Override
     public boolean computeScrollOffset() {
-        return mScroller.computeScrollOffset();
+        return scroller.computeScrollOffset();
     }
 
     @Override
     public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY,
                       int overX, int overY) {
-        mScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY, overX, overY);
+        scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY, overX, overY);
     }
 
     @Override
     public void forceFinished(boolean finished) {
-        mScroller.forceFinished(finished);
+        scroller.forceFinished(finished);
     }
 
     @Override
     public boolean isFinished() {
-        return mScroller.isFinished();
+        return scroller.isFinished();
     }
 
     @Override
     public int getCurrX() {
-        return mScroller.getCurrX();
+        return scroller.getCurrX();
     }
 
     @Override
     public int getCurrY() {
-        return mScroller.getCurrY();
+        return scroller.getCurrY();
     }
 }

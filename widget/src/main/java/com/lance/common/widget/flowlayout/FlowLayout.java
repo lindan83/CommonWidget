@@ -3,6 +3,8 @@ package com.lance.common.widget.flowlayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,23 +17,22 @@ import java.util.List;
  * Created by lindan on 16-11-9.
  * 流式布局
  */
-
 public class FlowLayout extends ViewGroup {
     private static final String TAG = "FlowLayout";
     private static final int LEFT = -1;
     private static final int CENTER = 0;
     private static final int RIGHT = 1;
 
-    protected List<List<View>> mAllViews = new ArrayList<>();
-    protected List<Integer> mLineHeight = new ArrayList<>();
-    protected List<Integer> mLineWidth = new ArrayList<>();
-    private int mGravity;
-    private List<View> mLineViews = new ArrayList<>();
+    protected List<SparseArray<View>> allViews = new ArrayList<>();
+    protected SparseIntArray lineHeight = new SparseIntArray();
+    protected SparseIntArray lineWidth = new SparseIntArray();
+    private int gravity;
+    private SparseArray<View> lineViews = new SparseArray<>();
 
     public FlowLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TagFlowLayout);
-        mGravity = ta.getInt(R.styleable.TagFlowLayout_gravity, LEFT);
+        gravity = ta.getInt(R.styleable.TagFlowLayout_gravity, LEFT);
         ta.recycle();
     }
 
@@ -97,10 +98,10 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mAllViews.clear();
-        mLineHeight.clear();
-        mLineWidth.clear();
-        mLineViews.clear();
+        allViews.clear();
+        lineHeight.clear();
+        lineWidth.clear();
+        lineViews.clear();
 
         int width = getWidth();
 
@@ -119,36 +120,36 @@ public class FlowLayout extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             if (childWidth + lineWidth + lp.leftMargin + lp.rightMargin > width - getPaddingLeft() - getPaddingRight()) {
-                mLineHeight.add(lineHeight);
-                mAllViews.add(mLineViews);
-                mLineWidth.add(lineWidth);
+                this.lineHeight.put(this.lineHeight.size(), lineHeight);
+                allViews.add(lineViews);
+                this.lineWidth.put(this.lineWidth.size(), lineWidth);
 
                 lineWidth = 0;
                 lineHeight = childHeight + lp.topMargin + lp.bottomMargin;
-                mLineViews = new ArrayList<>();
+                lineViews = new SparseArray<>();
             }
             lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
             lineHeight = Math.max(lineHeight, childHeight + lp.topMargin + lp.bottomMargin);
-            mLineViews.add(child);
+            lineViews.put(lineViews.size(), child);
 
         }
-        mLineHeight.add(lineHeight);
-        mLineWidth.add(lineWidth);
-        mAllViews.add(mLineViews);
+        this.lineHeight.put(this.lineHeight.size(), lineHeight);
+        this.lineWidth.put(this.lineWidth.size(), lineWidth);
+        allViews.add(lineViews);
 
 
         int left = getPaddingLeft();
         int top = getPaddingTop();
 
-        int lineNum = mAllViews.size();
+        int lineNum = allViews.size();
 
         for (int i = 0; i < lineNum; i++) {
-            mLineViews = mAllViews.get(i);
-            lineHeight = mLineHeight.get(i);
+            lineViews = allViews.get(i);
+            lineHeight = this.lineHeight.get(i);
 
             // set gravity
-            int currentLineWidth = this.mLineWidth.get(i);
-            switch (this.mGravity) {
+            int currentLineWidth = this.lineWidth.get(i);
+            switch (this.gravity) {
                 case LEFT:
                     left = getPaddingLeft();
                     break;
@@ -160,8 +161,8 @@ public class FlowLayout extends ViewGroup {
                     break;
             }
 
-            for (int j = 0; j < mLineViews.size(); j++) {
-                View child = mLineViews.get(j);
+            for (int j = 0; j < lineViews.size(); j++) {
+                View child = lineViews.get(j);
                 if (child.getVisibility() == View.GONE) {
                     continue;
                 }
@@ -189,7 +190,7 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
-        return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        return new MarginLayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
 
     @Override

@@ -1,10 +1,5 @@
 package com.lance.common.widget;
 
-/**
- * Created by lindan on 16-9-19.
- * 一个可滑动的扩展PagerSlidingTabStrip
- */
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -29,6 +24,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 /**
+ * Created by lindan on 16-9-19.
+ * 一个可滑动的扩展PagerSlidingTabStrip
  * 滑动指示器pstsindicatorcolor颜色
  * 在视图的底部的全宽度的线pstsunderlinecolor颜色
  * 选项卡之间的分隔pstsdividercolor颜色

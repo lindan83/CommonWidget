@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lance.widget.demo.FlowLayoutDemoActivity">
+
+    <com.lance.common.widget.flowlayout.FlowLayout
+        android:id="@+id/fl_tag_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:autoSelectEffect="true"
+        app:gravity="left"
+        app:maxSelect="5"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_606060"/>
+
+    <com.lance.common.widget.flowlayout.TagFlowLayout
+        android:id="@+id/tfl_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:autoSelectEffect="true"
+        app:gravity="center"
+        app:maxSelect="5"/>
+</LinearLayout>
